@@ -330,6 +330,31 @@ React, Vue, TypeScript는 사용하지 않습니다.
 - Console Error 없음
 - Lighthouse Performance 및 Accessibility 기준 충족
 
+## 검증과 결과 보고
+
+### 검증
+
+- Desktop(1280px 이상)에서 디자인 시안과 비교합니다.
+- Tablet(768px)에서 레이아웃을 확인합니다.
+- Mobile(360px)에서 레이아웃을 확인합니다.
+- 페이지 전체에 가로 스크롤이 없는지 확인합니다.
+- 모든 링크와 버튼을 실제로 클릭하여 확인합니다.
+- Hover 인터랙션을 확인합니다.
+- Hero Scroll Animation을 확인합니다.
+- Platform Technologies Hover 상태를 확인합니다.
+- Console Error가 없는지 확인합니다.
+- prefers-reduced-motion 동작을 확인합니다.
+
+### 결과 보고
+
+- 변경 파일
+- 구현 내용
+- 주요 판단
+- 검증 결과
+- 확인하지 못한 부분
+
+을 구분하여 작성합니다.b
+
 ## 브랜드 경험 목표
 
 - 종(Bell)을 브랜드 상징으로 활용한다.
