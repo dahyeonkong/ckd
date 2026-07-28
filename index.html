@@ -1,16 +1,366 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ko">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>종근당 | 모두가 바라는 건강한 미래</title>
+    <meta name="description" content="종근당은 끊임없는 연구와 혁신으로 신약 개발과 핵심 기술을 발전시키며 더 건강한 미래를 만들어갑니다.">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet"
+        href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@700&display=swap">
+    <link rel="stylesheet" href="css/style.css">
 </head>
 
 <body>
-    <ul>
-        <li></li>
-    </ul>
+    <header class="header is_dark_area" id="header">
+        <div class="header_inner inner">
+            <a class="logo" href="./index.html">
+                <img class="logo_icon" src="asset/logo_icon.png" alt="">
+                <img class="logo_text" src="asset/logo_main.png" alt="종근당">
+            </a>
+
+            <nav class="gnb" aria-label="주요 메뉴">
+                <a href="#hyojong">기업</a>
+                <a href="#new_area">제품</a>
+                <a href="#platform">연구</a>
+                <a href="#quick_menu">투자정보</a>
+                <a href="#history">홍보</a>
+                <a href="#footer">고객센터/CCM</a>
+                <a href="#global">지속가능경영</a>
+            </nav>
+
+            <div class="header_util">
+                <a href="#footer">채용공고</a>
+                <button class="lan_btn" type="button">
+                    <img class="ico" src="asset/globe.svg" alt="">
+                    <span>KOR</span>
+                </button>
+            </div>
+
+            <button class="btn_hammenu" type="button" id="btn_hammenu" aria-expanded="false"
+                aria-controls="mobile_menu">
+                <img src="asset/hammenu.svg" alt="">
+                <span class="blind">전체 메뉴 열기</span>
+            </button>
+        </div>
+    </header>
+
+    <nav class="mobile_menu" id="mobile_menu" aria-label="모바일 전체 메뉴">
+        <a href="#hyojong">기업</a>
+        <a href="#new_area">제품</a>
+        <a href="#platform">연구</a>
+        <a href="#quick_menu">투자정보</a>
+        <a href="#history">홍보</a>
+        <a href="#footer">고객센터/CCM</a>
+        <a href="#global">지속가능경영</a>
+    </nav>
+
+    <main>
+        <!-- hero -->
+        <div class="hero_ani">
+            <section class="hero is_dark_area" id="hero" aria-labelledby="hero_title">
+                <div class="hero_video_box">
+                    <video src="asset/ckd_hero.mp4" autoplay muted loop playsinline
+                        aria-label="종근당 브랜드 영상"></video>
+                </div>
+                <div class="hero_txt">
+                    <p class="hero_sub">모두가 바라는 건강한 미래</p>
+                    <h1 class="hero_title" id="hero_title">기다리는 것이 아니라<br>만드는 것입니다.</h1>
+                </div>
+            </section>
+
+            <img class="bell" id="bell" src="asset/bell.svg" alt="종근당 상징 종">
+        </div>
+
+        <!-- 효종연구소 -->
+        <section class="hyojong is_dark_area" id="hyojong" aria-labelledby="hyojong_title">
+            <div class="hyojong_img">
+                <img src="asset/hyojong.png" alt="효종연구소 전경">
+            </div>
+            <div class="hyojong_txt">
+                <p class="hyojong_label">효종연구소</p>
+                <h2 class="hyojong_title" id="hyojong_title">
+                    <span>새벽을 깨우는 종소리처럼</span>
+                    <span>새로운 시작을 알린다</span>
+                </h2>
+                <a class="btn_pill btn_glass" href="#hyojong">
+                    효종연구소 자세히보기
+                    <img class="ico" src="asset/arrow_right.svg" alt="">
+                </a>
+            </div>
+        </section>
+
+        <div class="wing_bg">
+            <!-- platform technologies -->
+            <section class="platform" id="platform" aria-labelledby="platform_title">
+                <div class="molac molac1"><img src="asset/molac1.png" alt=""></div>
+                <div class="molac molac2"><img src="asset/molac2.png" alt=""></div>
+                <div class="molac molac3"><img src="asset/molac3.png" alt=""></div>
+
+                <div class="platform_inner">
+                    <h2 class="con_title" id="platform_title">Platform Technologies</h2>
+
+                    <div class="platform_list">
+                        <article class="platform_item">
+                            <p class="platform_name">HDAC6</p>
+                            <div class="img_area">
+                                <img src="asset/tech1.png" alt="DNA 이중나선 구조 이미지">
+                            </div>
+                            <p class="platform_desc">HDACs는 세포 내 단백질들을<br>탈아세틸화하는 효소입니다.</p>
+                            <a class="btn_pill btn_solid" href="#platform">
+                                자세히보기
+                                <img class="ico" src="asset/arrow_right.svg" alt="">
+                            </a>
+                        </article>
+
+                        <article class="platform_item">
+                            <p class="platform_name">Liquistal Crystal</p>
+                            <div class="img_area">
+                                <img src="asset/tech2.png" alt="주사제 바이알과 주사기 이미지">
+                            </div>
+                            <p class="platform_desc">Liquistal 기술은 CKD 원천기술로 1회 주사로<br>1주일 내지 수 개월간 약효를 지속시키는<br>서방형 주사제 기술입니다.</p>
+                            <a class="btn_pill btn_solid" href="#platform">
+                                자세히보기
+                                <img class="ico" src="asset/arrow_right.svg" alt="">
+                            </a>
+                        </article>
+                    </div>
+                </div>
+            </section>
+
+            <!-- pioneering firsts -->
+            <section class="history" id="history" aria-labelledby="history_title">
+                <div class="history_inner">
+                    <h2 class="con_title" id="history_title">Pioneering Firsts</h2>
+
+                    <p class="history_bg_text" aria-hidden="true"><span>CKD
+      PHARM</span></p>
+
+                    <ol class="story_list">
+                        <li class="story js_reveal">
+                            <p class="story_txt">
+                                <strong>세계최초</strong> 네스프 바이오시밀러<br>
+                                네스벨 국내 허가 및 일본 수출
+                            </p>
+                            <span class="story_num" aria-hidden="true">1st</span>
+                        </li>
+                        <li class="story js_reveal">
+                            <p class="story_txt">
+                                1987' <strong>국내 최초</strong> 위궤양 치료제<br>
+                                오메프라졸 합성 성공
+                            </p>
+                            <span class="story_num" aria-hidden="true">2nd</span>
+                        </li>
+                        <li class="story js_reveal">
+                            <p class="story_txt">
+                                1948' <strong>국내 최초</strong>의 튜브제품<br>
+                                다이아졸연고 생산
+                            </p>
+                            <span class="story_num" aria-hidden="true">3rd</span>
+                        </li>
+                    </ol>
+                </div>
+            </section>
+        </div>
+
+        <!-- quick menu -->
+        <section class="quick_menu" id="quick_menu" aria-label="주요 서비스 바로가기">
+            <div class="quick_list inner">
+                <a class="quick_item is_dark_area" href="#platform">
+                    <video src="asset/flask.mp4" autoplay muted loop playsinline aria-hidden="true"></video>
+                    <h2 class="quick_title">Research &amp; Development</h2>
+                    <p class="quick_desc">끊임없는 연구와 혁신으로 신약 개발과 핵심 기술을<br>발전시키며, 더 건강한 미래를 만들어갑니다.</p>
+                    <img class="ico_arrow" src="asset/arrow_long.svg" alt="">
+                </a>
+
+                <a class="quick_item is_dark_area" href="#footer">
+                    <video src="asset/investor.mp4" autoplay muted loop playsinline aria-hidden="true"></video>
+                    <h2 class="quick_title">Investors</h2>
+                    <p class="quick_desc">주주와 투자자를 위해 경영 성과와 재무 정보를 투명하게<br>공개하고, 기업의 지속 가능한 성장 가치를 공유합니다.</p>
+                    <img class="ico_arrow" src="asset/arrow_long.svg" alt="">
+                </a>
+            </div>
+        </section>
+
+        <!-- innovation beyond borders -->
+        <section class="global" id="global" aria-labelledby="global_title">
+            <div class="global_inner">
+                <div class="global_txt">
+                    <h2 class="con_title" id="global_title">
+                        <span>Innovation</span>
+                        <span>Beyond Borders</span>
+                    </h2>
+                    <p class="global_lead">Creating new possibilities through global collaboration and research.</p>
+                </div>
+
+                <div class="earth" aria-hidden="true">
+                    <img src="asset/earth.gif" alt="">
+                </div>
+
+                <div class="global_cards">
+                    <article class="global_card js_reveal">
+                        <p class="label">스위스 글로벌 제약사</p>
+                        <h3 class="name">Novartis</h3>
+                        <p class="role">Global Innovation Partner</p>
+                        <p class="desc">혁신적인 연구개발을 통해<br>글로벌 헬스케어의 미래를 함께 만들어갑니다.</p>
+                    </article>
+
+                    <article class="global_card js_reveal">
+                        <p class="label">이스라엘 바이오 기업</p>
+                        <h3 class="name">Can-Fite BioPharma</h3>
+                        <p class="role">Clinical Development Partner</p>
+                        <p class="desc">간암 및 NASH 치료제의 국내 독점유통 계약을<br>통해 글로벌 바이오 혁신을 함께 추진하고 있습니다.</p>
+                    </article>
+
+                    <article class="global_card js_reveal">
+                        <p class="label">종근당 바이오 복합 연구단지</p>
+                        <h3 class="name">Baegot Bio Complex</h3>
+                        <p class="role">Global Innovation Hub</p>
+                        <p class="desc">차세대 바이오 연구개발과 기술 실증을<br>연결하는 글로벌 R&amp;D 허브를 구축하고 있습니다.</p>
+                    </article>
+                </div>
+            </div>
+        </section>
+
+        <!-- advancing medicine -->
+        <section class="new_area" id="new_area" aria-labelledby="new_title">
+            <h2 class="con_title" id="new_title">Advancing Medicine</h2>
+
+            <div class="product_list">
+                <article class="product_card js_reveal">
+                    <div class="product_img">
+                        <img src="asset/advancing1.png" alt="듀비에정 제품 이미지">
+                    </div>
+                    <div class="product_txt">
+                        <p class="product_sub">
+                            <span>국내 최초</span>
+                            <span>글리타존계 당뇨신약</span>
+                        </p>
+                        <h3 class="product_name">듀비에정</h3>
+                        <a class="btn_pill btn_line" href="#new_area">
+                            자세히보기
+                            <img class="ico" src="asset/arrow_right_dark.svg" alt="">
+                        </a>
+                    </div>
+                </article>
+
+                <article class="product_card js_reveal">
+                    <div class="product_img">
+                        <img src="asset/advancing2.png" alt="캄토벨주 제품 이미지">
+                    </div>
+                    <div class="product_txt">
+                        <p class="product_sub">
+                            <span>순수 독자기술로 개발한</span>
+                            <span>캄토테신계 항암제</span>
+                        </p>
+                        <h3 class="product_name">캄토벨주</h3>
+                        <a class="btn_pill btn_line" href="#new_area">
+                            자세히보기
+                            <img class="ico" src="asset/arrow_right_dark.svg" alt="">
+                        </a>
+                    </div>
+                </article>
+
+                <article class="product_card js_reveal">
+                    <div class="product_img">
+                        <img src="asset/advancing3.png" alt="벤포벨 제품 이미지">
+                    </div>
+                    <div class="product_txt">
+                        <p class="product_sub">
+                            <span>차원이 다른 피로엔</span>
+                            <span>오래가는 비타민</span>
+                        </p>
+                        <h3 class="product_name">벤포벨</h3>
+                        <a class="btn_pill btn_line" href="#new_area">
+                            자세히보기
+                            <img class="ico" src="asset/arrow_right_dark.svg" alt="">
+                        </a>
+                    </div>
+                </article>
+            </div>
+        </section>
+    </main>
+
+    <footer class="footer is_dark_area" id="footer">
+        <div class="footer_btn_area">
+            <a href="#footer">이용약관</a>
+            <a href="#footer">개인정보 처리방침</a>
+            <a href="#footer">이메일무단수집거부</a>
+            <a href="#footer">Contact Us</a>
+        </div>
+
+        <a class="logo" href="./index.html">
+            <img class="logo_icon" src="asset/logo_icon.png" alt="">
+            <img class="logo_text" src="asset/logo_main.png" alt="종근당">
+        </a>
+
+        <div class="footer_top">
+            <dl class="footer_info">
+                <div>
+                    <dt>사업자명</dt>
+                    <dd>(주)종근당</dd>
+                </div>
+                <div>
+                    <dt>사업자등록번호</dt>
+                    <dd>110-86-08069</dd>
+                </div>
+                <div>
+                    <dt>대표자명</dt>
+                    <dd>김영주</dd>
+                </div>
+                <div>
+                    <dt>유선전화</dt>
+                    <dd>02) 2194-0300</dd>
+                </div>
+                <div>
+                    <dt>주소</dt>
+                    <dd>서울특별시 서대문구 충정로 8</dd>
+                </div>
+            </dl>
+
+            <div class="select_box">
+                <button class="select_btn" type="button" id="select_btn" aria-expanded="false"
+                    aria-controls="select_list">
+                    <span>family site</span>
+                    <img class="ico" src="asset/arrow_down.svg" alt="">
+                </button>
+
+                <div class="select_list" id="select_list" hidden>
+                    <div class="select_group">
+                        <p class="select_group_tit">홀딩스</p>
+                        <a href="#footer">종근당 홀딩스</a>
+                    </div>
+                    <div class="select_group">
+                        <p class="select_group_tit">헬스 케어</p>
+                        <a href="#footer">종근당</a>
+                        <a href="#footer">종근당 바이오</a>
+                        <a href="#footer">경보제약</a>
+                        <a href="#footer">종근당 건강</a>
+                    </div>
+                    <div class="select_group">
+                        <p class="select_group_tit">부동산임대</p>
+                        <a href="#footer">종근당 산업</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <p class="copyright">Copyright 2019 by Chong Kun Dang pharmaceutical Corp, All right reserved.</p>
+
+        <p class="footer_bg_letter" aria-hidden="true">
+            <span>Better Life through</span>
+            <span>Better Medicine</span>
+        </p>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/lenis@1.1.13/dist/lenis.min.js"></script>
+    <script src="js/main.js"></script>
 </body>
 
 </html>
