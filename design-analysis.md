@@ -244,14 +244,14 @@ padding-bottom: 160px;
 
 ## 반응형
 
-### 360px
+### 402px
 
 - Single Column Layout
 - Mobile Navigation Drawer 사용
 - 텍스트 크기 축소
 - 일부 Grid → 1열 배치
 
-### 768px
+### 834px
 
 - Tablet 최적화 레이아웃
 - 카드 영역 2열 배치
