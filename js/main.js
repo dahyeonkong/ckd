@@ -31,29 +31,53 @@
   }
 
   /* ---------------------------------------------------------
-     모바일 전체 메뉴
+     모바일 / 태블릿 전체 메뉴 (드로어 + 아코디언)
      --------------------------------------------------------- */
   function initMobileMenu() {
     var btnHammenu = document.getElementById("btn_hammenu");
     var mobileMenu = document.getElementById("mobile_menu");
+    var menuDim = document.getElementById("menu_dim");
+    var btnClose = document.getElementById("btn_menu_close");
     if (!btnHammenu || !mobileMenu) return;
 
     var btnLabel = btnHammenu.querySelector(".blind");
+    var accordionBtns = mobileMenu.querySelectorAll(".mobile_menu_btn");
+
+    function closeAllLnb() {
+      accordionBtns.forEach(function (btn) {
+        btn.setAttribute("aria-expanded", "false");
+        var panel = document.getElementById(btn.getAttribute("aria-controls"));
+        if (panel) panel.hidden = true;
+      });
+    }
 
     function setMenuState(isOpen) {
       mobileMenu.classList.toggle("is_open", isOpen);
       btnHammenu.setAttribute("aria-expanded", String(isOpen));
       document.body.style.overflow = isOpen ? "hidden" : "";
+      if (menuDim) menuDim.hidden = !isOpen;
       if (btnLabel) {
         btnLabel.textContent = isOpen ? "전체 메뉴 닫기" : "전체 메뉴 열기";
       }
+      if (!isOpen) closeAllLnb();
     }
 
-    function handleHammenuClick() {
-      setMenuState(!mobileMenu.classList.contains("is_open"));
+    /* 한 번에 하나의 하위 메뉴만 펼친다 */
+    function handleAccordionClick(event) {
+      var btn = event.currentTarget;
+      var panel = document.getElementById(btn.getAttribute("aria-controls"));
+      if (!panel) return;
+
+      var willOpen = panel.hidden;
+      closeAllLnb();
+
+      if (willOpen) {
+        btn.setAttribute("aria-expanded", "true");
+        panel.hidden = false;
+      }
     }
 
-    function handleMenuLinkClick(event) {
+    function handleMenuClick(event) {
       if (event.target.closest("a")) setMenuState(false);
     }
 
@@ -64,9 +88,67 @@
       }
     }
 
-    btnHammenu.addEventListener("click", handleHammenuClick);
-    mobileMenu.addEventListener("click", handleMenuLinkClick);
+    btnHammenu.addEventListener("click", function () {
+      setMenuState(!mobileMenu.classList.contains("is_open"));
+    });
+
+    if (btnClose) {
+      btnClose.addEventListener("click", function () {
+        setMenuState(false);
+        btnHammenu.focus();
+      });
+    }
+
+    if (menuDim) {
+      menuDim.addEventListener("click", function () {
+        setMenuState(false);
+      });
+    }
+
+    accordionBtns.forEach(function (btn) {
+      btn.addEventListener("click", handleAccordionClick);
+    });
+
+    mobileMenu.addEventListener("click", handleMenuClick);
     document.addEventListener("keydown", handleKeydown);
+  }
+
+  /* ---------------------------------------------------------
+     데스크톱 GNB 드롭다운
+     hover는 CSS가 담당하고, 여기서는 키보드 접근과 aria 상태만 처리한다.
+     --------------------------------------------------------- */
+  function initGnb() {
+    var gnb = document.getElementById("gnb");
+    if (!gnb) return;
+
+    gnb.querySelectorAll(".gnb_item").forEach(function (item) {
+      var link = item.querySelector(".gnb_link");
+      var lnb = item.querySelector(".lnb");
+      if (!link || !lnb) return;
+
+      function setExpanded(isExpanded) {
+        link.setAttribute("aria-expanded", String(isExpanded));
+      }
+
+      item.addEventListener("mouseenter", function () {
+        setExpanded(true);
+      });
+      item.addEventListener("mouseleave", function () {
+        setExpanded(false);
+      });
+      item.addEventListener("focusin", function () {
+        setExpanded(true);
+      });
+      item.addEventListener("focusout", function (event) {
+        if (!item.contains(event.relatedTarget)) setExpanded(false);
+      });
+      item.addEventListener("keydown", function (event) {
+        if (event.key === "Escape") {
+          setExpanded(false);
+          link.focus();
+        }
+      });
+    });
   }
 
   /* ---------------------------------------------------------
@@ -192,6 +274,7 @@
      --------------------------------------------------------- */
   function init() {
     initMobileMenu();
+    initGnb();
     initSelectBox();
 
     if (isReducedMotion || !hasGsap || !hasScrollTrigger) return;

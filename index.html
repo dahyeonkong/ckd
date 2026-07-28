@@ -23,14 +23,76 @@
                 <img class="logo_text" src="asset/logo_main.png" alt="종근당">
             </a>
 
-            <nav class="gnb" aria-label="주요 메뉴">
-                <a href="#hyojong">기업</a>
-                <a href="#new_area">제품</a>
-                <a href="#platform">연구</a>
-                <a href="#quick_menu">투자정보</a>
-                <a href="#history">홍보</a>
-                <a href="#footer">고객센터/CCM</a>
-                <a href="#global">지속가능경영</a>
+            <nav class="gnb" id="gnb" aria-label="주요 메뉴">
+                <div class="gnb_item">
+                    <a class="gnb_link" href="#hyojong" aria-expanded="false" aria-controls="lnb_company">기업</a>
+                    <div class="lnb" id="lnb_company">
+                        <a href="#hyojong">개요</a>
+                        <a href="#hyojong">CEO인사말</a>
+                        <a href="#hyojong">비전</a>
+                        <a href="#hyojong">가족회사소개</a>
+                        <a href="#history">연혁</a>
+                        <a href="#hyojong">CI</a>
+                        <a href="#footer">회사위치</a>
+                    </div>
+                </div>
+
+                <div class="gnb_item">
+                    <a class="gnb_link" href="#new_area" aria-expanded="false" aria-controls="lnb_products">제품</a>
+                    <div class="lnb" id="lnb_products">
+                        <a href="#new_area">제품 소식</a>
+                        <a href="#new_area">제품 검색</a>
+                        <a href="#new_area">가정 상비약</a>
+                    </div>
+                </div>
+
+                <div class="gnb_item">
+                    <a class="gnb_link" href="#platform" aria-expanded="false" aria-controls="lnb_research">연구</a>
+                    <div class="lnb" id="lnb_research">
+                        <a href="#hyojong">연구소 소개</a>
+                        <a href="#history">연구 성과</a>
+                        <a href="#platform">진행 프로젝트</a>
+                        <a href="#new_area">발매신약</a>
+                        <a href="#platform">플랫폼 기술</a>
+                    </div>
+                </div>
+
+                <div class="gnb_item">
+                    <a class="gnb_link" href="#quick_menu" aria-expanded="false" aria-controls="lnb_investor">투자정보</a>
+                    <div class="lnb" id="lnb_investor">
+                        <a href="#quick_menu">재무정보</a>
+                        <a href="#quick_menu">주가정보</a>
+                        <a href="#quick_menu">IR</a>
+                    </div>
+                </div>
+
+                <div class="gnb_item">
+                    <a class="gnb_link" href="#history" aria-expanded="false" aria-controls="lnb_marketing">홍보</a>
+                    <div class="lnb" id="lnb_marketing">
+                        <a href="#history">종근당소식</a>
+                        <a href="#new_area">브랜드스토리</a>
+                    </div>
+                </div>
+
+                <div class="gnb_item">
+                    <a class="gnb_link" href="#footer">고객센터/CCM</a>
+                </div>
+
+                <div class="gnb_item">
+                    <a class="gnb_link" href="#global" aria-expanded="false" aria-controls="lnb_management">지속가능경영</a>
+                    <div class="lnb" id="lnb_management">
+                        <a href="#global">메인</a>
+                        <a href="#global">윤리경영</a>
+                        <a href="#global">상생협력</a>
+                        <a href="#global">EHS경영</a>
+                        <a href="#global">인권경영</a>
+                        <a href="#global">인재경영</a>
+                        <a href="#global">지배구조</a>
+                        <a href="#global">사회공헌</a>
+                        <a href="#footer">소비자중심경영(CCM)</a>
+                        <a href="#footer">사이버신문고</a>
+                    </div>
+                </div>
             </nav>
 
             <div class="header_util">
@@ -49,14 +111,109 @@
         </div>
     </header>
 
-    <nav class="mobile_menu" id="mobile_menu" aria-label="모바일 전체 메뉴">
-        <a href="#hyojong">기업</a>
-        <a href="#new_area">제품</a>
-        <a href="#platform">연구</a>
-        <a href="#quick_menu">투자정보</a>
-        <a href="#history">홍보</a>
-        <a href="#footer">고객센터/CCM</a>
-        <a href="#global">지속가능경영</a>
+    <div class="menu_dim" id="menu_dim" hidden></div>
+
+    <nav class="mobile_menu" id="mobile_menu" aria-label="전체 메뉴">
+        <div class="mobile_menu_head">
+            <a class="logo" href="./index.html">
+                <img class="logo_icon" src="asset/logo_icon.png" alt="">
+                <img class="logo_text" src="asset/logo_main.png" alt="종근당">
+            </a>
+            <button class="btn_close" type="button" id="btn_menu_close">
+                <img src="asset/close.svg" alt="">
+                <span class="blind">전체 메뉴 닫기</span>
+            </button>
+        </div>
+
+        <ul class="mobile_menu_list">
+            <li class="mobile_menu_item">
+                <button class="mobile_menu_btn" type="button" aria-expanded="false" aria-controls="m_lnb_company">
+                    기업
+                    <img class="ico" src="asset/chevron_down.svg" alt="">
+                </button>
+                <div class="mobile_lnb" id="m_lnb_company" hidden>
+                    <a href="#hyojong">개요</a>
+                    <a href="#hyojong">CEO인사말</a>
+                    <a href="#hyojong">비전</a>
+                    <a href="#hyojong">가족회사소개</a>
+                    <a href="#history">연혁</a>
+                    <a href="#hyojong">CI</a>
+                    <a href="#footer">회사위치</a>
+                </div>
+            </li>
+
+            <li class="mobile_menu_item">
+                <button class="mobile_menu_btn" type="button" aria-expanded="false" aria-controls="m_lnb_products">
+                    제품
+                    <img class="ico" src="asset/chevron_down.svg" alt="">
+                </button>
+                <div class="mobile_lnb" id="m_lnb_products" hidden>
+                    <a href="#new_area">제품 소식</a>
+                    <a href="#new_area">제품 검색</a>
+                    <a href="#new_area">가정 상비약</a>
+                </div>
+            </li>
+
+            <li class="mobile_menu_item">
+                <button class="mobile_menu_btn" type="button" aria-expanded="false" aria-controls="m_lnb_research">
+                    연구
+                    <img class="ico" src="asset/chevron_down.svg" alt="">
+                </button>
+                <div class="mobile_lnb" id="m_lnb_research" hidden>
+                    <a href="#hyojong">연구소 소개</a>
+                    <a href="#history">연구 성과</a>
+                    <a href="#platform">진행 프로젝트</a>
+                    <a href="#new_area">발매신약</a>
+                    <a href="#platform">플랫폼 기술</a>
+                </div>
+            </li>
+
+            <li class="mobile_menu_item">
+                <button class="mobile_menu_btn" type="button" aria-expanded="false" aria-controls="m_lnb_investor">
+                    투자정보
+                    <img class="ico" src="asset/chevron_down.svg" alt="">
+                </button>
+                <div class="mobile_lnb" id="m_lnb_investor" hidden>
+                    <a href="#quick_menu">재무정보</a>
+                    <a href="#quick_menu">주가정보</a>
+                    <a href="#quick_menu">IR</a>
+                </div>
+            </li>
+
+            <li class="mobile_menu_item">
+                <button class="mobile_menu_btn" type="button" aria-expanded="false" aria-controls="m_lnb_marketing">
+                    홍보
+                    <img class="ico" src="asset/chevron_down.svg" alt="">
+                </button>
+                <div class="mobile_lnb" id="m_lnb_marketing" hidden>
+                    <a href="#history">종근당소식</a>
+                    <a href="#new_area">브랜드스토리</a>
+                </div>
+            </li>
+
+            <li class="mobile_menu_item">
+                <button class="mobile_menu_btn" type="button" aria-expanded="false" aria-controls="m_lnb_management">
+                    지속가능경영
+                    <img class="ico" src="asset/chevron_down.svg" alt="">
+                </button>
+                <div class="mobile_lnb" id="m_lnb_management" hidden>
+                    <a href="#global">메인</a>
+                    <a href="#global">윤리경영</a>
+                    <a href="#global">상생협력</a>
+                    <a href="#global">EHS경영</a>
+                    <a href="#global">인권경영</a>
+                    <a href="#global">인재경영</a>
+                    <a href="#global">지배구조</a>
+                    <a href="#global">사회공헌</a>
+                    <a href="#footer">소비자중심경영(CCM)</a>
+                    <a href="#footer">사이버신문고</a>
+                </div>
+            </li>
+
+            <li class="mobile_menu_item">
+                <a class="mobile_menu_link" href="#footer">고객센터/CCM</a>
+            </li>
+        </ul>
     </nav>
 
     <main>

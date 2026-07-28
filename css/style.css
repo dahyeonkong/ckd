@@ -285,19 +285,40 @@ address {
   height: 20px;
 }
 
-/* 모바일 전체 메뉴 */
-.mobile_menu {
+/* 모바일 / 태블릿 전체 메뉴 (302px 우측 드로어) */
+.menu_dim {
   position: fixed;
   inset: 0;
+  z-index: 98;
+  background-color: rgba(7, 16, 33, 0.5);
+  animation: dim_in var(--dur_base) var(--ease_base);
+}
+
+.menu_dim[hidden] {
+  display: none;
+}
+
+@keyframes dim_in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.mobile_menu {
+  position: fixed;
+  top: 0;
+  right: 0;
   z-index: 99;
   display: flex;
   flex-direction: column;
-  justify-content: center;
-  gap: 28px;
-  padding: 80px var(--gap_side) 40px;
-  background-color: rgba(7, 27, 54, 0.96);
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
+  width: 302px;
+  max-width: 85vw;
+  height: 100%;
+  overflow-y: auto;
+  background-color: var(--color_blue00);
   transform: translateX(100%);
   visibility: hidden;
   transition: transform var(--dur_base) var(--ease_base),
@@ -309,12 +330,81 @@ address {
   visibility: visible;
 }
 
-.mobile_menu a {
-  display: inline-block;
-  padding: 8px 0;
-  font-size: 24px;
-  font-weight: 500;
-  color: var(--color_gray03);
+.mobile_menu_head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-shrink: 0;
+  padding: 17px 24px;
+  border-bottom: 1px solid var(--color_blue06);
+}
+
+.btn_close {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+}
+
+.mobile_menu_list {
+  padding: 35px 24px;
+}
+
+.mobile_menu_item + .mobile_menu_item {
+  margin-top: 10px;
+}
+
+.mobile_menu_btn,
+.mobile_menu_link {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  height: 40px;
+  font-size: var(--size_body);
+  font-weight: 400;
+  line-height: 1;
+  letter-spacing: 0.5px;
+  color: var(--color_gray01);
+  text-align: left;
+}
+
+.mobile_menu_btn .ico {
+  flex-shrink: 0;
+  width: 18px;
+  height: 18px;
+  transition: transform var(--dur_base) var(--ease_base);
+}
+
+.mobile_menu_btn[aria-expanded="true"] .ico {
+  transform: rotate(180deg);
+}
+
+.mobile_lnb {
+  display: flex;
+  flex-direction: column;
+  padding: 4px 0 12px 12px;
+}
+
+.mobile_lnb[hidden] {
+  display: none;
+}
+
+.mobile_lnb a {
+  padding: 12px 0;
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 1;
+  letter-spacing: 0.5px;
+  color: var(--color_gray05);
+  transition: color var(--dur_base) var(--ease_base);
+}
+
+@media (hover: hover) {
+  .mobile_lnb a:hover {
+    color: var(--color_gray00);
+  }
 }
 
 /* =========================================================
@@ -1530,7 +1620,8 @@ address {
   }
 
   .btn_hammenu,
-  .mobile_menu {
+  .mobile_menu,
+  .menu_dim {
     display: none;
   }
 
@@ -1542,12 +1633,17 @@ address {
     color: var(--color_gray03);
   }
 
-  .gnb a {
+  .gnb_item {
     position: relative;
+  }
+
+  .gnb_link {
+    position: relative;
+    display: block;
     padding-block: 4px;
   }
 
-  .gnb a::after {
+  .gnb_link::after {
     content: "";
     position: absolute;
     left: 0;
@@ -1560,10 +1656,63 @@ address {
     transition: transform var(--dur_base) var(--ease_base);
   }
 
-  .gnb a:hover::after,
-  .gnb a:focus-visible::after,
-  .gnb a.is_active::after {
+  .gnb_item:hover .gnb_link::after,
+  .gnb_link:focus-visible::after,
+  .gnb_link.is_active::after {
     transform: scaleX(1);
+  }
+
+  /* hover 드롭다운 (LNB) */
+  .lnb {
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    display: flex;
+    flex-direction: column;
+    width: 220px;
+    margin-top: 21px;
+    padding-inline: 16px;
+    border-radius: 8px;
+    background-color: var(--color_blue00);
+    opacity: 0;
+    visibility: hidden;
+    transform: translate(-50%, -8px);
+    transition: opacity var(--dur_base) var(--ease_base),
+      visibility var(--dur_base) var(--ease_base),
+      transform var(--dur_base) var(--ease_base);
+  }
+
+  /* 헤더와 패널 사이 마우스 이동 구간을 덮어 hover가 끊기지 않게 한다 */
+  .lnb::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: -21px;
+    width: 100%;
+    height: 21px;
+  }
+
+  .gnb_item:hover .lnb,
+  .gnb_item:focus-within .lnb {
+    opacity: 1;
+    visibility: visible;
+    transform: translate(-50%, 0);
+  }
+
+  .lnb a {
+    padding-block: 24px;
+    font-size: 20px;
+    font-weight: 400;
+    line-height: 1;
+    color: var(--color_gray03);
+    white-space: nowrap;
+    transition: color var(--dur_base) var(--ease_base);
+  }
+
+  .lnb a:hover {
+    color: var(--color_gray00);
+    text-decoration: underline;
+    text-underline-offset: 4px;
   }
 
   .header_util {

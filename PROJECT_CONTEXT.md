@@ -1,9 +1,12 @@
 # CKD 홈페이지 현재 상태
 
-마지막 업데이트: 2026-07-28
+마지막 업데이트: 2026-07-29
 
 ## 구현 완료
 
+- 전체 메뉴 (`2398:49`)
+  - Desktop: GNB 각 항목 hover 시 LNB 드롭다운 패널 노출 (6개 패널)
+  - Tablet / Mobile: 햄버거 버튼 → 302px 우측 드로어 + 아코디언 하위 메뉴
 - `ckd_home` 메인 화면 전체 (Desktop / Tablet / Mobile)
   - Header (GNB ↔ 햄버거 메뉴 분기)
   - Hero (영상 + 브랜드 카피 + Bell 심볼)
@@ -22,6 +25,12 @@
 ## 확정된 UX 정책
 
 - 태블릿 breakpoint는 **834px** 사용 (PRD의 768px 대신 Figma iPad 프레임 실측값. 사용자 확인 완료)
+- **전체 메뉴 노출 방식**
+  - 1280px 이상: GNB 항목 hover 시 드롭다운(LNB). CSS `:hover` / `:focus-within`이 표시를 담당하고 JS는 `aria-expanded`와 Escape만 처리
+  - 1280px 미만: 햄버거 → 302px 우측 드로어. 하위 메뉴는 아코디언이며 **한 번에 하나만** 펼쳐짐
+  - 드로어를 닫으면 펼쳐둔 아코디언은 모두 초기화됨
+  - 드로어는 dim 클릭 / X 버튼 / Escape / 링크 클릭으로 닫힘
+  - `고객센터/CCM`은 하위 메뉴가 없어 드롭다운·아코디언 없이 링크로만 동작 (Figma 동일)
 - 모바일 전체 메뉴는 닫힌 상태로 시작하며, 링크 클릭 또는 Escape로 닫힘
 - family site select는 닫힌 상태로 시작하며, 외부 클릭 또는 Escape로 닫힘
 - 스크롤 등장 애니메이션의 초기 상태는 GSAP이 관리한다. CSS로 숨기지 않으므로 스크립트가 실패해도 콘텐츠는 항상 노출된다
@@ -90,9 +99,15 @@
 | img alt 누락 | 0건 |
 | :focus-visible | 포커스 시 아웃라인 렌더 확인 |
 | Figma 시각 대조 | 모바일 history / global / product 섹션 대조 후 라운드 방향·glass 배경·2열 배치 수정 |
+| GNB 드롭다운 (1280px+) | 7개 항목 중 6개에 패널 노출. 링크 수 7/3/5/3/2/0/10로 Figma와 일치. 패널 220px, 헤더 바로 아래 정렬 |
+| GNB 드롭다운 표시/해제 | `:focus-within` 기준 visibility hidden→visible, opacity 0→1, transform 복귀 확인. 포커스 해제 시 원복 확인 |
+| 드로어 열기/닫기 | 햄버거·X·dim·Escape 모두 정상. `aria-expanded`·body 스크롤 잠금·버튼 레이블 갱신 확인 |
+| 드로어 아코디언 | 펼침/접힘, 다른 항목 열면 이전 항목 자동 닫힘, 드로어 닫으면 전체 초기화 확인 |
+| 드로어 열림 중 가로 스크롤 | 없음 (360px에서 docW 360 유지, 드로어 폭 302px) |
 
-- 확인 화면: 360px, 834px, 1280px
+- 확인 화면: 360px, 834px, 1280px, 1440px
 - 확인하지 못한 부분:
   - `prefers-reduced-motion` 실제 동작 (CSS·JS 구현 및 규칙 존재는 확인, OS 설정 전환 테스트 불가)
   - Edge / Safari (프리뷰가 Chromium 단일 엔진)
   - Lighthouse 성능·접근성 점수 (측정 도구 미실행)
+  - GNB 드롭다운의 **실제 마우스 hover** — 프리뷰가 도구 호출 간 hover 상태를 유지하지 못해, 동일 CSS 규칙을 공유하는 `:focus-within`으로 검증했습니다. 시각적으로 패널이 열린 스크린샷은 확인했습니다.
