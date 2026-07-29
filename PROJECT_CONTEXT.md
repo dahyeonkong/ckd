@@ -23,6 +23,11 @@
 
 - 없음
 
+## 검수 반영 (2026-07-29)
+
+- **header 글자색 구간 전환** — `platform`, `quick_menu`, `global`, `new_area` 위를 지날 때 `.header.is_dark_text` 부여. gnb는 `--color_blue01`, right(채용공고/KOR)는 `--color_blue04`(#415A78, 이번에 신규 추가된 토큰). `history`는 배경이 짙은 남색이라 **제외**(사용자 확정).
+- **전체 메뉴 열림 중 header 숨김** — `.header.is_hidden`(opacity 0 + visibility hidden). 드로어에 자체 X 버튼이 있어 햄버거가 가려져도 닫을 수 있음.
+
 ## 확정된 UX 정책
 
 - 태블릿 breakpoint는 **834px** 사용 (PRD의 768px 대신 Figma iPad 프레임 실측값. 사용자 확인 완료)

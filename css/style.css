@@ -8,6 +8,7 @@
   --color_blue00: #071021;
   --color_blue01: #071b36;
   --color_blue02: #0f2147;
+  --color_blue04: #415A78;
   --color_blue05: #1b263a;
   --color_blue06: #324154;
 
@@ -241,6 +242,14 @@ address {
   padding: 10px var(--gap_side);
   backdrop-filter: blur(5px);
   -webkit-backdrop-filter: blur(5px);
+  transition: opacity var(--dur_base) var(--ease_base),
+    visibility var(--dur_base) var(--ease_base);
+}
+
+/* 전체 메뉴가 열려 있는 동안 header를 감춘다 (드로어에 자체 닫기 버튼이 있음) */
+.header.is_hidden {
+  opacity: 0;
+  visibility: hidden;
 }
 
 .header_inner {
@@ -283,6 +292,30 @@ address {
   justify-content: center;
   width: 22px;
   height: 20px;
+  color: var(--color_gray03);
+  transition: color var(--dur_base) var(--ease_base);
+}
+
+.btn_hammenu .ico {
+  width: 22px;
+  height: 20px;
+}
+
+/* 밝은 섹션 위를 지날 때 로고와 아이콘도 어둡게 전환한다.
+   로고는 흰색 PNG뿐이라 filter 로 토큰 색에 맞춘다 (실측 rgb(9,26,54) ≒ blue01). */
+.header.is_dark_text .btn_hammenu {
+  color: var(--color_blue01);
+}
+
+.header.is_dark_text .logo_icon,
+.header.is_dark_text .logo_text {
+  filter: brightness(0) saturate(100%) invert(8%) sepia(35%) saturate(3200%)
+    hue-rotate(202deg) brightness(94%) contrast(98%);
+}
+
+.logo_icon,
+.logo_text {
+  transition: filter var(--dur_base) var(--ease_base);
 }
 
 /* 모바일 / 태블릿 전체 메뉴 (302px 우측 드로어) */
@@ -1640,6 +1673,7 @@ address {
     font-size: var(--size_body);
     font-weight: 400;
     color: var(--color_gray03);
+    transition: color var(--dur_base) var(--ease_base);
   }
 
   .gnb_item {
@@ -1730,6 +1764,16 @@ address {
     gap: 24px;
     font-size: var(--size_body);
     color: var(--color_gray05);
+    transition: color var(--dur_base) var(--ease_base);
+  }
+
+  /* 밝은 섹션(platform, quick_menu, global, new_area) 위를 지날 때 글자색 반전 */
+  .header.is_dark_text .gnb {
+    color: var(--color_blue01);
+  }
+
+  .header.is_dark_text .header_util {
+    color: var(--color_blue04);
   }
 
   .lan_btn {
@@ -1877,7 +1921,7 @@ address {
     inset: 0;
     z-index: 0;
     opacity: 0.2;
-    background: url("../asset/history_bg.png") no-repeat center / cover;
+    background: url("../asset/line_bg.svg") no-repeat top center / 80%;
     pointer-events: none;
   }
 

@@ -44,6 +44,7 @@
     var btnClose = document.getElementById("btn_menu_close");
     if (!btnHammenu || !mobileMenu) return;
 
+    var header = document.getElementById("header");
     var btnLabel = btnHammenu.querySelector(".blind");
     var accordionBtns = mobileMenu.querySelectorAll(".mobile_menu_btn");
 
@@ -60,10 +61,20 @@
       btnHammenu.setAttribute("aria-expanded", String(isOpen));
       document.body.style.overflow = isOpen ? "hidden" : "";
       if (menuDim) menuDim.hidden = !isOpen;
+      if (header) header.classList.toggle("is_hidden", isOpen);
       if (btnLabel) {
         btnLabel.textContent = isOpen ? "전체 메뉴 닫기" : "전체 메뉴 열기";
       }
       if (!isOpen) closeAllLnb();
+
+      /* header가 숨으므로 포커스가 보이지 않는 곳에 남지 않도록 옮긴다.
+         드로어는 transition 이 끝나야 visibility 가 visible 이 되므로 그때 포커스한다. */
+      if (isOpen && btnClose) {
+        mobileMenu.addEventListener("transitionend", function handleOpenEnd() {
+          mobileMenu.removeEventListener("transitionend", handleOpenEnd);
+          if (mobileMenu.classList.contains("is_open")) btnClose.focus();
+        });
+      }
     }
 
     /* 한 번에 하나의 하위 메뉴만 펼친다 */
@@ -88,8 +99,20 @@
     function handleKeydown(event) {
       if (event.key === "Escape" && mobileMenu.classList.contains("is_open")) {
         setMenuState(false);
-        btnHammenu.focus();
+        focusHammenu();
       }
+    }
+
+    /* header도 transition 이 끝나야 다시 focus 가능하다 */
+    function focusHammenu() {
+      if (!header) {
+        btnHammenu.focus();
+        return;
+      }
+      header.addEventListener("transitionend", function handleShowEnd() {
+        header.removeEventListener("transitionend", handleShowEnd);
+        btnHammenu.focus();
+      });
     }
 
     btnHammenu.addEventListener("click", function () {
@@ -99,7 +122,7 @@
     if (btnClose) {
       btnClose.addEventListener("click", function () {
         setMenuState(false);
-        btnHammenu.focus();
+        focusHammenu();
       });
     }
 
@@ -115,6 +138,40 @@
 
     mobileMenu.addEventListener("click", handleMenuClick);
     document.addEventListener("keydown", handleKeydown);
+  }
+
+  /* ---------------------------------------------------------
+     밝은 섹션 위를 지날 때 header 글자색을 어둡게 전환한다.
+     history는 배경이 짙은 남색이라 대상에서 제외한다.
+     --------------------------------------------------------- */
+  function initHeaderTheme() {
+    var header = document.getElementById("header");
+    if (!header) return;
+
+    var lightSectionIds = ["platform", "quick_menu", "global", "new_area"];
+    var triggers = [];
+
+    function syncHeaderTheme() {
+      var isOverLight = triggers.some(function (trigger) {
+        return trigger.isActive;
+      });
+      header.classList.toggle("is_dark_text", isOverLight);
+    }
+
+    lightSectionIds.forEach(function (id) {
+      var section = document.getElementById(id);
+      if (!section) return;
+
+      triggers.push(
+        window.ScrollTrigger.create({
+          trigger: section,
+          start: "top top",
+          end: "bottom top",
+          onToggle: syncHeaderTheme,
+          onRefresh: syncHeaderTheme
+        })
+      );
+    });
   }
 
   /* ---------------------------------------------------------
@@ -306,13 +363,20 @@
     initGnb();
     initSelectBox();
 
-    if (isReducedMotion || !hasGsap || !hasScrollTrigger) return;
+    if (!hasGsap || !hasScrollTrigger) return;
 
     window.gsap.registerPlugin(window.ScrollTrigger);
-    initSmoothScroll();
-    initHeroAnimation();
-    initHyojongAnimation();
-    initRevealAnimation();
+
+    if (!isReducedMotion) {
+      initSmoothScroll();
+      initHeroAnimation();
+      initHyojongAnimation();
+      initRevealAnimation();
+    }
+
+    /* hero pin이 만든 여백까지 반영되도록 pin 트리거보다 뒤에 만든다.
+       글자색 전환은 모션이 아니므로 prefers-reduced-motion 에서도 적용한다. */
+    initHeaderTheme();
   }
 
   if (document.readyState === "loading") {
