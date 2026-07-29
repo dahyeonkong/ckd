@@ -25,6 +25,24 @@
 
 ## 검수 반영 (2026-07-29)
 
+- **global 섹션 재구성** — 브레이크포인트마다 동작이 다르다.
+  - 데스크톱(1280+): `.global_sticky`가 `position: sticky; height: 100vh`로 고정되고, 그 안 `.global_inner`는 Figma대로 **886px**. `.global_cards`는 496px(top 264)에 `overflow-y: auto`라 넘치는 카드(scrollHeight 1776)를 안에서 스크롤한다. 카드 504×283, left 836/100/836, top 120/563/1006.
+  - 태블릿(834+): 같은 구조에 Figma iPad 실측값. inner **758px**(txt 194 + gap 68 + cards 496), 카드 420×235, left 354/60/354, top 25/464/881, scrollHeight 1156.
+  - 모바일: 가로 배치 유지. 카드 3장이 왼쪽으로 계속 흐르며 순환한다(`global_marquee` 32s linear infinite). hover 시 일시정지.
+  - **`.global` 자체를 `height:100vh; position:sticky`로 두면 `<main>` 안에서 이후 모든 섹션이 지나갈 때까지 붙어 있다.** 그래서 `.global`에 스크롤 길이(180~200vh)를 주고 안쪽 `.global_sticky`를 100vh로 고정했다.
+  - 카드 left 좌표는 Figma 기준(1440 / 834)이라 그보다 좁으면 넘친다. `left: min(836px, calc(100% - 504px))` 형태로 오른쪽 이탈을 막는다.
+  - 마퀴 이동 거리는 `-50%`로는 gap·padding 때문에 어긋난다(1080 vs 필요값 1068). js가 카드 한 세트 폭을 실측해 `--marquee_shift`로 넘긴다.
+  - `.global_txt`는 섹션 텍스트와 **카드 내부에 모두 쓰이는 이름**이라, 섹션 쪽 규칙은 `.global_inner > .global_txt`로, 카드 쪽은 `.global_card .global_txt`로 한정해야 한다. 한정하지 않으면 카드 안 텍스트가 섹션 좌우 여백(`--gap_side` 240px)을 받아 폭이 사라지고 글자가 세로로 쪼개진다.
+  - **카드 목록에 별도 스크롤 영역을 두지 않는다.** `.global_cards`는 `overflow: hidden`이고, sticky 구간의 페이지 스크롤 진행률을 `initGlobalScroll`이 `scrollTop`으로 옮긴다. 사용자가 카드 위에 마우스를 올려야 굴러가는 중첩 스크롤 UX를 없애고 스크롤바도 나오지 않는다.
+
+- **platform_item on/off 스크롤 전환** (Figma `2419:558`) — 기본은 off(제목만, `--color_gray06`), 화면에 들어오면 `.is_active`가 붙어 on(이미지·설명·버튼 노출, 제목 `--color_blue06`), 지나가면 다시 off.
+  - 데스크톱 제목 크기는 off 64px / on 72px. 크기 변화로 레이아웃이 밀리지 않도록 `.platform_name` 박스 높이를 80px로 고정.
+  - **데스크톱(1280+)은 Figma대로 `.platform_inner` 높이를 940px로 고정하고 항목을 절대배치한다.** 항목 폭 620px, 1번은 `top:0` / 2번은 `bottom:0`. 문서 흐름에 영향이 없으므로 off 는 `display:none`으로 실제로 접어 제목만 남긴다.
+  - 절대배치 상태에서 두 항목이 동시에 on 이면 겹치므로, **데스크톱에서만 한 번에 하나만 켠다**(`initPlatformItems`의 상호배제).
+  - 태블릿·모바일은 일반 흐름을 유지하며 off 는 `visibility:hidden`으로 자리를 남긴다. 흐름 레이아웃에서 `display:none`으로 접으면 높이가 500px 이상 변해 아래 트리거가 계속 밀리고, 이를 `onToggle` 안의 `ScrollTrigger.refresh()`로 보정하려다 **무한 재귀(stack overflow)** 가 발생했었다.
+  - `.platform_inner`는 좌우 여백을 margin 으로만 준다. 태블릿에서 상속되는 `padding-inline`을 그대로 두면 여백이 두 번 적용돼 콘텐츠 폭이 320px로 줄고 제목이 2줄이 된다.
+- **로고·햄버거·globe 아이콘 밝은 구간 대응** — 햄버거와 globe는 인라인 SVG(`stroke="currentColor"`)로 바꿔 기존 색상 규칙을 상속받게 함. 로고는 흰색 PNG뿐이라 `filter`로 처리(캔버스 실측 rgb(9,26,54), 목표 blue01 rgb(7,27,54)과 오차 3).
+
 - **header 글자색 구간 전환** — `platform`, `quick_menu`, `global`, `new_area` 위를 지날 때 `.header.is_dark_text` 부여. gnb는 `--color_blue01`, right(채용공고/KOR)는 `--color_blue04`(#415A78, 이번에 신규 추가된 토큰). `history`는 배경이 짙은 남색이라 **제외**(사용자 확정).
 - **전체 메뉴 열림 중 header 숨김** — `.header.is_hidden`(opacity 0 + visibility hidden). 드로어에 자체 X 버튼이 있어 햄버거가 가려져도 닫을 수 있음.
 

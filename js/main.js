@@ -141,6 +141,116 @@
   }
 
   /* ---------------------------------------------------------
+     모바일 global 카드 순환.
+     트랙을 한 벌 복제해 두면 -50% 지점이 시작점과 같아져 끊김 없이 반복된다.
+     태블릿 이상은 절대배치로 바뀌므로 복제본을 걷어낸다.
+     --------------------------------------------------------- */
+  function initGlobalMarquee() {
+    var track = document.getElementById("global_cards_track");
+    if (!track) return;
+
+    var mobileQuery = window.matchMedia("(max-width: 833px)");
+    var originals = Array.prototype.slice.call(track.children);
+
+    /* 카드 한 세트 폭(카드 + 뒤따르는 gap)을 재서 이동 거리로 넘긴다 */
+    function setShiftDistance() {
+      var gap = parseFloat(window.getComputedStyle(track).columnGap) || 0;
+      var shift = originals.reduce(function (total, card) {
+        return total + card.getBoundingClientRect().width + gap;
+      }, 0);
+      track.style.setProperty("--marquee_shift", shift + "px");
+    }
+
+    function syncClones() {
+      var clones = track.querySelectorAll(".is_clone");
+
+      if (!mobileQuery.matches) {
+        clones.forEach(function (clone) {
+          clone.remove();
+        });
+        return;
+      }
+
+      if (clones.length) {
+        setShiftDistance();
+        return;
+      }
+
+      originals.forEach(function (card) {
+        /* 순환 중에는 원본과 복제본이 같아 보여야 하므로 등장 애니메이션은 뺀다 */
+        card.classList.remove("js_reveal");
+
+        var clone = card.cloneNode(true);
+        clone.classList.add("is_clone");
+        clone.classList.remove("js_reveal");
+        clone.setAttribute("aria-hidden", "true");
+        track.appendChild(clone);
+      });
+
+      setShiftDistance();
+    }
+
+    syncClones();
+    mobileQuery.addEventListener("change", syncClones);
+    window.addEventListener("resize", syncClones);
+  }
+
+  /* ---------------------------------------------------------
+     platform_item 을 화면에 들어오면 on, 지나가면 다시 off 로 되돌린다.
+     --------------------------------------------------------- */
+  function initPlatformItems() {
+    var items = Array.prototype.slice.call(
+      document.querySelectorAll(".platform_item")
+    );
+    if (!items.length) return;
+
+    /* 데스크톱은 항목을 절대배치하므로 두 개가 동시에 on 이면 겹친다.
+       그래서 데스크톱에서만 한 번에 하나만 켠다. */
+    var desktopQuery = window.matchMedia("(min-width: 1280px)");
+
+    items.forEach(function (item) {
+      window.ScrollTrigger.create({
+        trigger: item,
+        start: "top 40%",
+        end: "bottom 20%",
+        invalidateOnRefresh: true,
+        onToggle: function (self) {
+          if (self.isActive && desktopQuery.matches) {
+            items.forEach(function (other) {
+              other.classList.toggle("is_active", other === item);
+            });
+            return;
+          }
+          item.classList.toggle("is_active", self.isActive);
+        }
+      });
+    });
+  }
+
+  /* ---------------------------------------------------------
+     global 이 sticky 로 고정돼 있는 동안, 페이지 스크롤을 그대로
+     카드 목록의 이동량으로 옮긴다. 별도 스크롤 영역을 만들지 않는다.
+     --------------------------------------------------------- */
+  function initGlobalScroll() {
+    var section = document.getElementById("global");
+    var cards = document.getElementById("global_cards");
+    if (!section || !cards) return;
+
+    window.ScrollTrigger.create({
+      trigger: section,
+      start: "top top",
+      end: "bottom bottom",
+      invalidateOnRefresh: true,
+      onUpdate: function (self) {
+        var maxScroll = cards.scrollHeight - cards.clientHeight;
+        /* 모바일은 가로 마퀴라 넘치는 세로 영역이 없다 */
+        if (maxScroll <= 0) return;
+        cards.scrollTop = maxScroll * self.progress;
+      }
+    });
+  }
+
+  /* ---------------------------------------------------------
      밝은 섹션 위를 지날 때 header 글자색을 어둡게 전환한다.
      history는 배경이 짙은 남색이라 대상에서 제외한다.
      --------------------------------------------------------- */
@@ -362,6 +472,7 @@
     initMobileMenu();
     initGnb();
     initSelectBox();
+    initGlobalMarquee();
 
     if (!hasGsap || !hasScrollTrigger) return;
 
@@ -375,7 +486,9 @@
     }
 
     /* hero pin이 만든 여백까지 반영되도록 pin 트리거보다 뒤에 만든다.
-       글자색 전환은 모션이 아니므로 prefers-reduced-motion 에서도 적용한다. */
+       상태 전환은 모션이 아니므로 prefers-reduced-motion 에서도 적용한다. */
+    initPlatformItems();
+    initGlobalScroll();
     initHeaderTheme();
   }
 
