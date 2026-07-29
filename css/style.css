@@ -713,7 +713,7 @@ address {
 }
 
 /* 세로 회전 배경 텍스트 */
-.history_bg_text {
+/* .history_bg_text {
   position: absolute;
   bottom: 129px;
   left: 50%;
@@ -726,7 +726,7 @@ address {
   opacity: 0.18;
   transform: translateX(-50%);
   pointer-events: none;
-}
+} */
 
 .history_bg_text span {
   display: block;
@@ -945,7 +945,7 @@ address {
   z-index: 1;
   display: flex;
   gap: 16px;
-  padding: 40px var(--gap_side);
+  padding: 20px var(--gap_side);
   overflow-x: auto;
   scroll-snap-type: x mandatory;
   -webkit-overflow-scrolling: touch;
@@ -954,8 +954,8 @@ address {
 /* Figma glass 이펙트(radius 33)를 backdrop-filter로 구현 */
 .global_card {
   flex: 0 0 auto;
-  width: 300px;
-  padding: 70px;
+  /* width: 300px; */
+  padding: 20px 0;
   border: 1px solid rgba(255, 255, 255, 0.6);
   border-radius: var(--radius_global);
   background-color: rgba(255, 255, 255, 0.35);
@@ -1018,7 +1018,7 @@ address {
 }
 
 .new_area .con_title {
-  /* padding-inline: var(--gap_side); */
+  padding-inline: var(--gap_side);
 }
 
 .product_list {
@@ -1059,6 +1059,7 @@ address {
   max-width: 362px;
   height: 200px;
   flex-direction: row-reverse;
+  justify-content: space-between;
   align-items: center;
   border-radius: 40px;
   background: radial-gradient(circle at 50% 50%,
