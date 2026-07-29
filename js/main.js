@@ -435,8 +435,73 @@
      --------------------------------------------------------- */
   /* 초기 상태는 GSAP이 직접 관리한다.
      CSS로 숨기지 않으므로 스크립트가 없거나 실패해도 콘텐츠는 항상 노출된다. */
+  /* ---------------------------------------------------------
+     Advancing Medicine 카드 스택
+     834px 이상에서만 목록을 고정하고, 마지막에는 두 장만 겹쳐 보인다.
+     --------------------------------------------------------- */
+  function initProductStack() {
+    var section = document.getElementById("new_area");
+    var productList = section && section.querySelector(".product_list");
+    if (!section || !productList) return;
+
+    var cards = Array.prototype.slice.call(
+      productList.querySelectorAll(".product_card")
+    );
+    if (cards.length < 3) return;
+
+    var media = window.gsap.matchMedia();
+    var stackHold = { progress: 0 };
+
+    media.add("(min-width: 834px)", function () {
+      productList.classList.add("is_product_stack");
+
+      var cardHeight = cards[0].getBoundingClientRect().height;
+      var cardGap = parseFloat(window.getComputedStyle(productList).rowGap) || 0;
+      var cardStep = cardHeight + cardGap;
+
+      cards.forEach(function (card, index) {
+        window.gsap.set(card, {
+          xPercent: -50,
+          y: index * cardStep,
+          zIndex: index + 1
+        });
+      });
+
+      var stackTimeline = window.gsap.timeline({
+        defaults: { ease: "none" },
+        scrollTrigger: {
+          trigger: productList,
+          start: "top 15%",
+          end: function () {
+            return "+=" + window.innerHeight * 2;
+          },
+          scrub: 0.8,
+          pin: true,
+          anticipatePin: 1,
+          invalidateOnRefresh: true
+        }
+      });
+
+      stackTimeline
+        .to(cards[0], { y: 0, duration: 0.55 }, 0)
+        .to(cards[1], { y: 40, duration: 0.55 }, 0.2)
+        .to(cards[2], { y: 80, duration: 0.55 }, 0.45)
+        .to(stackHold, { progress: 1, duration: 0.6 });
+
+      return function () {
+        productList.classList.remove("is_product_stack");
+        window.gsap.set(cards, { clearProps: "transform,opacity,zIndex" });
+      };
+    });
+  }
+
   function initRevealAnimation() {
     document.querySelectorAll(".js_reveal").forEach(function (item) {
+      if (item.classList.contains("product_card") &&
+        item.closest(".product_list").classList.contains("is_product_stack")) {
+        return;
+      }
+
       window.gsap.from(item, {
         y: 40,
         opacity: 0,
@@ -482,6 +547,7 @@
       initSmoothScroll();
       initHeroAnimation();
       initHyojongAnimation();
+      initProductStack();
       initRevealAnimation();
     }
 
