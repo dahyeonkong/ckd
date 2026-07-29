@@ -475,6 +475,7 @@ address {
 
 .hero_txt {
   display: flex;
+  width: 100%;
   flex-direction: column;
   gap: 20px;
   padding: 80px var(--gap_side);
@@ -492,6 +493,7 @@ address {
   font-size: var(--size_hero_title);
   font-weight: 700;
   line-height: 1.1;
+  white-space: nowrap;
 }
 
 /* GSAP이 transform(scale)을 쓰므로 중앙 정렬은 margin으로 처리한다 */
@@ -589,7 +591,7 @@ address {
   width: 190vh;
   height: 100vw;
   max-height: 100%;
-  opacity: 0.52;
+  opacity: 0.22;
   background: url("../asset/wing.png") no-repeat center / cover;
   transform: translateX(-50%) rotate(-90deg);
   transform-origin: center;
@@ -1380,6 +1382,7 @@ address {
     left: 33px;
     width: 144px;
     height: 144px;
+    z-index:-88;
   }
 
   .molac2 {
@@ -1387,6 +1390,7 @@ address {
     right: 60px;
     width: 192px;
     height: 192px;
+    z-index:-88;
   }
 
   .history_inner {
@@ -1912,6 +1916,7 @@ address {
 
   /* history - 어두운 배경 */
   .history {
+    height: 1920px;
     background-color: var(--color_blue01);
   }
 
@@ -1920,18 +1925,19 @@ address {
     position: absolute;
     inset: 0;
     z-index: 0;
-    opacity: 0.2;
-    background: url("../asset/line_bg.svg") no-repeat top center / 80%;
+    opacity: 0.1;
+    background: url("../asset/line_bg.svg") no-repeat top right / 90%;
     pointer-events: none;
   }
 
   .history_inner {
+    height: 100%;
     position: relative;
     z-index: 1;
     max-width: 1440px;
     margin-inline: auto;
     padding: 200px var(--gap_side);
-    gap: 120px;
+    gap: 160px;
   }
 
   .history .con_title {
@@ -1943,7 +1949,7 @@ address {
   }
 
   .story_list {
-    gap: 100px;
+    gap: 400px;
   }
 
   .story {
