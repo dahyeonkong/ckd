@@ -199,31 +199,115 @@
      platform_item 을 화면에 들어오면 on, 지나가면 다시 off 로 되돌린다.
      --------------------------------------------------------- */
   function initPlatformItems() {
+    var platform = document.getElementById("platform");
+    var platformInner = platform && platform.querySelector(".platform_inner");
+    var wingBackground = platform && platform.closest(".wing_bg");
+    var molacElements = platform
+      ? Array.prototype.slice.call(platform.querySelectorAll(".molac"))
+      : [];
     var items = Array.prototype.slice.call(
       document.querySelectorAll(".platform_item")
     );
-    if (!items.length) return;
+    if (!platform || !platformInner || !items.length) return;
 
     /* 데스크톱은 항목을 절대배치하므로 두 개가 동시에 on 이면 겹친다.
        그래서 데스크톱에서만 한 번에 하나만 켠다. */
-    var desktopQuery = window.matchMedia("(min-width: 1280px)");
+    function setActiveItem(activeIndex) {
+      items.forEach(function (item, index) {
+        item.classList.toggle("is_active", index === activeIndex);
+      });
+    }
 
-    items.forEach(function (item) {
-      window.ScrollTrigger.create({
-        trigger: item,
-        start: "top 40%",
-        end: "bottom 20%",
+    function pinMolacElements() {
+      if (!wingBackground) return;
+
+      molacElements.forEach(function (molac) {
+        molac.classList.remove("is_platform_released");
+        molac.style.removeProperty("top");
+        molac.style.removeProperty("left");
+        molac.style.removeProperty("right");
+      });
+      platform.classList.remove("has_released_molac");
+      wingBackground.classList.add("is_platform_pinned");
+    }
+
+    function releaseMolacElements() {
+      if (!wingBackground) return;
+
+      var wingBackgroundRect = wingBackground.getBoundingClientRect();
+
+      molacElements.forEach(function (molac) {
+        var molacRect = molac.getBoundingClientRect();
+        molac.style.top = molacRect.top - wingBackgroundRect.top + "px";
+        molac.style.left = molacRect.left - wingBackgroundRect.left + "px";
+        molac.style.right = "auto";
+        molac.classList.add("is_platform_released");
+      });
+      platform.classList.add("has_released_molac");
+      wingBackground.classList.remove("is_platform_pinned");
+    }
+
+    function resetMolacElements() {
+      if (wingBackground) wingBackground.classList.remove("is_platform_pinned");
+
+      molacElements.forEach(function (molac) {
+        molac.classList.remove("is_platform_released");
+        molac.style.removeProperty("top");
+        molac.style.removeProperty("left");
+        molac.style.removeProperty("right");
+      });
+      platform.classList.remove("has_released_molac");
+    }
+
+    var media = window.gsap.matchMedia();
+
+    media.add("(min-width: 1280px)", function () {
+      setActiveItem(-1);
+
+      var platformTrigger = window.ScrollTrigger.create({
+        trigger: platform,
+        start: "top top",
+        end: "bottom bottom",
+        pin: platformInner,
+        pinSpacing: false,
+        anticipatePin: 1,
         invalidateOnRefresh: true,
-        onToggle: function (self) {
-          if (self.isActive && desktopQuery.matches) {
-            items.forEach(function (other) {
-              other.classList.toggle("is_active", other === item);
-            });
-            return;
-          }
-          item.classList.toggle("is_active", self.isActive);
+        onEnter: pinMolacElements,
+        onEnterBack: pinMolacElements,
+        onLeave: releaseMolacElements,
+        onLeaveBack: resetMolacElements,
+        onUpdate: function (self) {
+          setActiveItem(self.progress < 0.25 ? -1 : self.progress < 0.65 ? 0 : 1);
         }
       });
+
+      return function () {
+        platformTrigger.kill();
+        resetMolacElements();
+        items.forEach(function (item) {
+          item.classList.remove("is_active");
+        });
+      };
+    });
+
+    media.add("(max-width: 1279px)", function () {
+      var itemTriggers = items.map(function (item) {
+        return window.ScrollTrigger.create({
+          trigger: item,
+          start: "top 40%",
+          end: "bottom 20%",
+          invalidateOnRefresh: true,
+          onToggle: function (self) {
+            item.classList.toggle("is_active", self.isActive);
+          }
+        });
+      });
+
+      return function () {
+        itemTriggers.forEach(function (trigger) {
+          trigger.kill();
+        });
+      };
     });
   }
 
