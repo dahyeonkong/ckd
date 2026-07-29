@@ -608,6 +608,12 @@ address {
   overflow: hidden;
 }
 
+@media (max-width: 833px) {
+  .platform {
+    padding-bottom: 80px;
+  }
+}
+
 .platform_inner {
   display: flex;
   flex-direction: column;
@@ -657,6 +663,20 @@ address {
 
 .platform_item.is_active .btn_pill {
   transition-delay: 0.2s;
+}
+
+@media (max-width: 1279px) {
+  .platform_item .img_area,
+  .platform_item .platform_desc,
+  .platform_item .btn_pill {
+    opacity: 1;
+    visibility: visible;
+    transform: none;
+  }
+
+  .platform_name {
+    color: var(--color_blue06);
+  }
 }
 
 .platform_item .img_area {
@@ -746,13 +766,34 @@ address {
 }
 
 .history::before {
-  content: "";
+  display: none;
+}
+
+.history_line_bg {
+  --line_reveal: 0%;
   position: absolute;
   inset: 0;
   z-index: 0;
+  overflow: hidden;
   opacity: 0.1;
-  background: url("../asset/line_bg.svg") no-repeat top right / 90%;
+  mask-image: linear-gradient(to bottom,
+      #000 0%,
+      #000 calc(var(--line_reveal) - 8%),
+      transparent var(--line_reveal),
+      transparent 100%);
+  -webkit-mask-image: linear-gradient(to bottom,
+      #000 0%,
+      #000 calc(var(--line_reveal) - 8%),
+      transparent var(--line_reveal),
+      transparent 100%);
   pointer-events: none;
+}
+
+.history_line_bg img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: top right;
 }
 
 .history_inner {
@@ -804,60 +845,57 @@ address {
 }
 
 .story {
+  --story_radius: clamp(48px, 10vw, 60px);
   position: relative;
   display: flex;
   flex-direction: column;
-  align-items: center;
-  gap: 22px;
-  min-height: 134px;
-  padding: 30px 28px 60px;
+  align-items: flex-start;
+  min-height: 148px;
+  padding: 32px 36px;
   overflow: hidden;
-  border-radius: 50px 50px 0 50px;
-  background: var(--color_history_grdiant);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
-  box-shadow: var(--shadow_story);
-  transition: transform var(--dur_base) var(--ease_base),
-    box-shadow var(--dur_base) var(--ease_base);
+  border-radius: var(--story_radius) var(--story_radius) 0 var(--story_radius);
+  background: var(--color_gray00);
+  transition: transform var(--dur_base) var(--ease_base);
 }
 
 .story:nth-child(2n) {
-  border-radius: 50px 50px 50px 0;
+  border-radius: var(--story_radius) var(--story_radius) var(--story_radius) 0;
 }
 
 .story_txt {
   font-size: 20px;
-  font-weight: 300;
-  line-height: 1.1;
+  font-weight: 400;
+  line-height: 1.25;
   color: var(--color_blue01);
-  text-align: center;
+  text-align: left;
   word-break: keep-all;
 }
 
 .story_txt strong {
-  font-weight: 600;
+  font-weight: 700;
 }
 
 .story_num {
   position: absolute;
-  right: -1px;
-  bottom: -9px;
-  font-size: 48px;
+  right: -4px;
+  bottom: -12px;
+  font-family: var(--font_base);
+  font-size: 60px;
   font-weight: 600;
   line-height: 1.1;
-  color: var(--color_gray00);
-  opacity: 0.5;
+  color: var(--color_blue04);
+  opacity: 0.6;
+  text-transform: lowercase;
 }
 
 .story:nth-child(2n) .story_num {
   right: auto;
-  left: -2px;
+  left: -4px;
 }
 
 @media (hover: hover) {
   .story:hover {
     transform: translateY(-4px);
-    box-shadow: 2px 8px 18px 1px rgba(40, 76, 137, 0.35);
   }
 }
 
@@ -2172,13 +2210,12 @@ address {
   }
 
   .history::before {
-    content: "";
-    position: absolute;
-    inset: 0;
-    z-index: 0;
-    opacity: 0.1;
-    background: url("../asset/line_bg.svg") no-repeat top right / 90%;
-    pointer-events: none;
+    display: none;
+  }
+
+  .history_line_bg {
+    left: auto;
+    width: 90%;
   }
 
   .history_inner {
@@ -2206,15 +2243,14 @@ address {
 
   .story {
     width: 400px;
-    min-height: auto;
-    padding: 24px 20px 24px 40px;
-    border-radius: var(--radius_pill);
+    min-height: 148px;
+    padding: 32px 36px;
+    border-radius: var(--story_radius) var(--story_radius) 0 var(--story_radius);
     background: var(--color_gray00);
-    box-shadow: var(--shadow_story);
   }
 
   .story:nth-child(2n) {
-    border-radius: var(--radius_pill);
+    border-radius: var(--story_radius) var(--story_radius) var(--story_radius) 0;
   }
 
   .story:nth-child(1) {
@@ -2230,27 +2266,13 @@ address {
     margin-right: 0;
   }
 
-  .story_txt {
-    text-align: left;
-  }
-
   .story_num {
-    position: static;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 60px;
-    height: 60px;
-    font-size: 0;
-    opacity: 1;
-    background: url("../asset/circle.svg") no-repeat center / contain;
-  }
-
-  .story {
-    flex-direction: row;
-    align-items: center;
-    justify-content: space-between;
-    gap: 12px;
+    position: absolute;
+    display: block;
+    width: auto;
+    height: auto;
+    font-size: 60px;
+    background: none;
   }
 
   .quick_menu {
@@ -2459,6 +2481,11 @@ address {
    접근성 - 모션 최소화
    ========================================================= */
 @media (prefers-reduced-motion: reduce) {
+  .history_line_bg {
+    mask-image: none;
+    -webkit-mask-image: none;
+  }
+
 
   *,
   *::before,

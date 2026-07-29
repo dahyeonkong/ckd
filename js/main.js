@@ -290,25 +290,6 @@
       };
     });
 
-    media.add("(max-width: 1279px)", function () {
-      var itemTriggers = items.map(function (item) {
-        return window.ScrollTrigger.create({
-          trigger: item,
-          start: "top 40%",
-          end: "bottom 20%",
-          invalidateOnRefresh: true,
-          onToggle: function (self) {
-            item.classList.toggle("is_active", self.isActive);
-          }
-        });
-      });
-
-      return function () {
-        itemTriggers.forEach(function (trigger) {
-          trigger.kill();
-        });
-      };
-    });
   }
 
   /* ---------------------------------------------------------
@@ -330,6 +311,28 @@
         /* 모바일은 가로 마퀴라 넘치는 세로 영역이 없다 */
         if (maxScroll <= 0) return;
         cards.scrollTop = maxScroll * self.progress;
+      }
+    });
+  }
+
+  /* ---------------------------------------------------------
+     history 배경 선은 SVG의 clip-path 벡터를 스크롤 진행에 맞춰 드러낸다.
+     원본이 stroke 기반 SVG가 아니므로 dashoffset 대신 노출 영역을 제어한다.
+     --------------------------------------------------------- */
+  function initHistoryLineAnimation() {
+    var history = document.getElementById("history");
+    var lineBackground = history && history.querySelector(".history_line_bg");
+    if (!history || !lineBackground) return;
+
+    window.gsap.to(lineBackground, {
+      "--line_reveal": "108%",
+      ease: "none",
+      scrollTrigger: {
+        trigger: history,
+        start: "top 80%",
+        end: "bottom 20%",
+        scrub: true,
+        invalidateOnRefresh: true
       }
     });
   }
@@ -637,6 +640,7 @@
       initHeroAnimation();
       initHyojongAnimation();
       initProductStack();
+      initHistoryLineAnimation();
       initRevealAnimation();
     }
 
