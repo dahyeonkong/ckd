@@ -17,14 +17,18 @@
       smoothWheel: true
     });
 
-    function raf(time) {
-      lenis.raf(time);
-      requestAnimationFrame(raf);
-    }
-    requestAnimationFrame(raf);
-
-    if (hasScrollTrigger) {
+    /* GSAP ticker에 Lenis를 물려 스크롤과 ScrollTrigger가 같은 프레임에서 갱신되게 한다 */
+    if (hasGsap && hasScrollTrigger) {
       lenis.on("scroll", window.ScrollTrigger.update);
+      window.gsap.ticker.add(function (time) {
+        lenis.raf(time * 1000);
+      });
+      window.gsap.ticker.lagSmoothing(0);
+    } else {
+      (function raf(time) {
+        lenis.raf(time);
+        requestAnimationFrame(raf);
+      })();
     }
 
     return lenis;
@@ -190,12 +194,13 @@
   /* ---------------------------------------------------------
      Hero 축소 + Bell 등장 (ScrollTrigger)
      --------------------------------------------------------- */
+  /* 스크롤에 따라 hero가 축소되며 사라지고, 그 자리에 bell이 등장한다. */
   function initHeroAnimation() {
+    var heroAni = document.getElementById("hero_ani");
     var hero = document.getElementById("hero");
     var bell = document.getElementById("bell");
-    if (!hero || !bell) return;
+    if (!heroAni || !hero || !bell) return;
 
-    var videoBox = hero.querySelector(".hero_video_box");
     var heroTxt = hero.querySelector(".hero_txt");
 
     if (heroTxt) {
@@ -208,30 +213,54 @@
       });
     }
 
-    if (videoBox && window.matchMedia("(min-width: 1280px)").matches) {
-      window.gsap.to(videoBox, {
-        scale: 0.86,
-        borderRadius: "40px",
-        ease: "none",
-        scrollTrigger: {
-          trigger: hero,
-          start: "top top",
-          end: "bottom top",
-          scrub: true
-        }
-      });
-    }
+    window.gsap.set(bell, { scale: 0.35, opacity: 0 });
 
-    window.gsap.from(bell, {
-      scale: 0.6,
-      opacity: 0,
-      duration: 1,
-      ease: "back.out(1.6)",
+    var heroTl = window.gsap.timeline({
+      defaults: { ease: "none" },
       scrollTrigger: {
-        trigger: bell,
-        start: "top 85%"
+        trigger: heroAni,
+        start: "top top",
+        end: function () {
+          return "+=" + window.innerHeight * 1.6;
+        },
+        scrub: 0.8,
+        pin: true,
+        anticipatePin: 1,
+        invalidateOnRefresh: true
       }
     });
+
+    heroTl
+      /* hero 축소 후 소멸 */
+      .to(hero, { scale: 0.32, borderRadius: 60, duration: 1, ease: "power1.in" }, 0)
+      .to(hero, { opacity: 0, duration: 0.35 }, 0.5)
+      /* bell 등장 */
+      .to(bell, { scale: 1, opacity: 1, ease: "back.out(1.5)", duration: 0.5 }, 0.45);
+  }
+
+  /* bell 모션이 끝난 직후, 다음 섹션이 확대되며 화면을 채운다.
+     hero pin이 풀리는 지점과 hyojong 진입 지점이 맞물리도록 트리거를 잡는다. */
+  function initHyojongAnimation() {
+    var hyojong = document.getElementById("hyojong");
+    if (!hyojong) return;
+
+    window.gsap.fromTo(
+      hyojong,
+      { scale: 0.2, opacity: 0.15, borderRadius: 80 },
+      {
+        scale: 1,
+        opacity: 1,
+        borderRadius: 0,
+        ease: "power1.out",
+        scrollTrigger: {
+          trigger: hyojong,
+          start: "top bottom",
+          end: "top top",
+          scrub: 0.8,
+          invalidateOnRefresh: true
+        }
+      }
+    );
   }
 
   /* ---------------------------------------------------------
@@ -282,6 +311,7 @@
     window.gsap.registerPlugin(window.ScrollTrigger);
     initSmoothScroll();
     initHeroAnimation();
+    initHyojongAnimation();
     initRevealAnimation();
   }
 

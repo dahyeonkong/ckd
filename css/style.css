@@ -410,19 +410,20 @@ address {
 /* =========================================================
    hero
    ========================================================= */
+/* hero 축소 → bell 등장 인터랙션 무대.
+   bell은 hero 위에 겹쳐 두고, 초기 상태와 진행은 GSAP이 관리한다. */
 .hero_ani {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 216px;
-  padding-bottom: 160px;
+  position: relative;
 }
 
 .hero {
   display: flex;
   flex-direction: column;
   width: 100%;
+  overflow: hidden;
   background-color: var(--color_blue00);
+  transform-origin: center center;
+  will-change: transform, opacity;
 }
 
 .hero_video_box {
@@ -460,20 +461,31 @@ address {
   line-height: 1.1;
 }
 
+/* GSAP이 transform(scale)을 쓰므로 중앙 정렬은 margin으로 처리한다 */
 .bell {
+  position: absolute;
+  top: 50%;
+  left: 50%;
   width: 120px;
   height: 120px;
+  margin: -60px 0 0 -60px;
+  pointer-events: none;
 }
 
 /* =========================================================
    hyojong
    ========================================================= */
+/* bell 모션 이후 확대되며 등장한다. 초기 상태와 진행은 GSAP이 관리한다. */
 .hyojong {
+  position: relative;
   display: flex;
   flex-direction: column;
   gap: 40px;
   padding: 70px var(--gap_side);
+  overflow: hidden;
   background-color: var(--color_blue00);
+  transform-origin: center center;
+  will-change: transform, opacity;
 }
 
 .hyojong_img {
@@ -1278,10 +1290,6 @@ address {
     height: 32px;
   }
 
-  .hero_ani {
-    gap: 160px;
-  }
-
   .hero_video_box {
     height: 578px;
   }
@@ -1294,6 +1302,7 @@ address {
   .bell {
     width: 160px;
     height: 160px;
+    margin: -80px 0 0 -80px;
   }
 
   /* 효종연구소 - 이미지 노출 */
@@ -1749,11 +1758,6 @@ address {
   }
 
   /* hero - 영상 위 카피 오버레이 */
-  .hero_ani {
-    gap: 360px;
-    padding-bottom: 160px;
-  }
-
   .hero {
     position: relative;
     height: 100vh;
@@ -1780,6 +1784,7 @@ address {
   .bell {
     width: 300px;
     height: 300px;
+    margin: -150px 0 0 -150px;
   }
 
   /* 효종연구소 - 배경 위 우측 정렬 */

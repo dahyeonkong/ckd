@@ -4,6 +4,7 @@
 
 ## 구현 완료
 
+- **hero_ani 스크롤 인터랙션** — 스크롤에 따라 hero가 축소·소멸하고 bell이 등장, 이어서 hyojong이 확대되며 화면을 채움
 - 전체 메뉴 (`2398:49`)
   - Desktop: GNB 각 항목 hover 시 LNB 드롭다운 패널 노출 (6개 패널)
   - Tablet / Mobile: 햄버거 버튼 → 302px 우측 드로어 + 아코디언 하위 메뉴
@@ -25,6 +26,19 @@
 ## 확정된 UX 정책
 
 - 태블릿 breakpoint는 **834px** 사용 (PRD의 768px 대신 Figma iPad 프레임 실측값. 사용자 확인 완료)
+- **hero_ani 인터랙션**
+  - `hero_ani`를 ScrollTrigger로 pin하고, 스크롤 거리 `viewport 높이 × 1.6` 동안 scrub(0.8) 진행
+  - 진행 0~1: hero `scale 1 → 0.32`, `border-radius 0 → 60px`
+  - 진행 0.5~0.85: hero `opacity 1 → 0`
+  - 진행 0.45~0.95: bell `scale 0.35 → 1`, `opacity 0 → 1` (`back.out(1.5)`)
+  - bell은 hero 위에 절대배치로 겹쳐 두고 중앙 정렬은 `margin`으로 처리 (GSAP이 `transform`을 쓰므로 `translate(-50%)` 사용 불가)
+  - bell의 초기 상태는 GSAP `set`이 부여하므로, 스크립트 미실행 시 bell은 hero 중앙에 그대로 노출됨
+  - `end`를 함수로 두고 `invalidateOnRefresh`를 켜 리사이즈 시 스크롤 거리 재계산
+- **hyojong 등장 인터랙션**
+  - hero pin이 끝나는 지점부터 뷰포트 1개 높이 동안 `scale 0.5 → 1`, `opacity 0.15 → 1`, `border-radius 80px → 0` (`power1.out`, scrub 0.8)
+  - 트리거는 `start: "top bottom"` / `end: "top top"`. hyojong의 상단이 pin-spacer 바로 아래에 있어 **pin 종료 지점과 시작 지점이 정확히 일치**함 (별도 오프셋 계산 불필요)
+  - hyojong은 DOM 순서를 유지한 일반 흐름 요소로 두었다. 무대에 겹쳐 올리지 않았으므로 브레이크포인트별 hyojong 레이아웃(모바일 이미지 없음 등)이 그대로 유지된다
+  - 초기 상태를 CSS가 아닌 GSAP `fromTo`가 부여하므로 스크립트 미실행 시 hyojong은 정상 크기로 노출됨
 - **전체 메뉴 노출 방식**
   - 1280px 이상: GNB 항목 hover 시 드롭다운(LNB). CSS `:hover` / `:focus-within`이 표시를 담당하고 JS는 `aria-expanded`와 Escape만 처리
   - 1280px 미만: 햄버거 → 302px 우측 드로어. 하위 메뉴는 아코디언이며 **한 번에 하나만** 펼쳐짐
@@ -46,7 +60,7 @@
 - **Poppins** (Google Fonts): 영문 섹션 타이틀 (`.con_title`), footer 워터마크
 - **GSAP 3.12.5**: Hero 카피 등장, Bell 등장, 섹션 reveal
 - **ScrollTrigger 3.12.5**: 스크롤 연동 트리거 (총 14개 생성)
-- **Lenis 1.1.13**: 부드러운 스크롤
+- **Lenis 1.1.13**: 부드러운 스크롤. GSAP `ticker`에 물려 스크롤과 ScrollTrigger가 같은 프레임에 갱신되도록 연동 (`lagSmoothing(0)`)
 - **Swiper**: 사용하지 않음. 모바일 global 카드는 CSS `overflow-x: auto` + `scroll-snap`으로 처리
 
 ## 저장 데이터
@@ -104,6 +118,15 @@
 | 드로어 열기/닫기 | 햄버거·X·dim·Escape 모두 정상. `aria-expanded`·body 스크롤 잠금·버튼 레이블 갱신 확인 |
 | 드로어 아코디언 | 펼침/접힘, 다른 항목 열면 이전 항목 자동 닫힘, 드로어 닫으면 전체 초기화 확인 |
 | 드로어 열림 중 가로 스크롤 | 없음 (360px에서 docW 360 유지, 드로어 폭 302px) |
+| hero pin 생성 | `hero_ani` pin, start 0 / end = 뷰포트 높이 × 1.6 (800px 뷰포트 기준 1280) |
+| hero 인터랙션 구간별 값 | 진행 0 → 0.25 → 0.5 → 0.75 → 1 에서 hero scale 1 → 0.96 → 0.83 → 0.62 → 0.32, opacity 1 → 1 → 1 → 0.29 → 0, radius 0 → 4 → 15 → 34 → 60px |
+| bell 등장 | 같은 구간에서 scale 0.35 → 0.35 → 0.61 → 1.05 → 1, opacity 0 → 0 → 0.39 → 1 → 1 |
+| bell 위치 | 진행 중 뷰포트 정중앙 유지 확인 (오차 30px 이내) |
+| pin 지오메트리 | pin 중 `hero_ani`가 `position: fixed`, top 0 / left 0 / 뷰포트 크기와 일치. `position: fixed`를 깨뜨리는 조상 요소 없음 |
+| pin 이후 섹션 흐름 | pin-spacer 다음에 `hyojong`이 빈틈 없이 이어짐 |
+| hero → hyojong 연결 | hero pin 종료(1280) = hyojong 트리거 시작(1280). 차이 0px |
+| hyojong 확대 구간별 값 | 진행 0 → 0.25 → 0.5 → 0.75 → 1 에서 scale 0.50 → 0.72 → 0.88 → 0.97 → 1.00, opacity 0.15 → 0.52 → 0.79 → 0.95 → 1, radius 80 → 45 → 20 → 5 → 0px |
+| 리사이즈 대응 | 뷰포트 변경 후 `refresh()` 시 end 값 재계산 확인 |
 
 - 확인 화면: 360px, 834px, 1280px, 1440px
 - 확인하지 못한 부분:
@@ -111,3 +134,4 @@
   - Edge / Safari (프리뷰가 Chromium 단일 엔진)
   - Lighthouse 성능·접근성 점수 (측정 도구 미실행)
   - GNB 드롭다운의 **실제 마우스 hover** — 프리뷰가 도구 호출 간 hover 상태를 유지하지 못해, 동일 CSS 규칙을 공유하는 `:focus-within`으로 검증했습니다. 시각적으로 패널이 열린 스크린샷은 확인했습니다.
+  - **hero 인터랙션 진행 중의 시각 캡처** — 프리뷰 창이 pin으로 `position: fixed`가 된 요소를 렌더링하지 못해 중간 프레임 스크린샷이 비어 나옵니다. 스크롤 최상단(핀 시작 전) 화면은 정상 렌더링을 확인했고, 진행 중 상태는 요소의 위치·크기·투명도를 수치로 검증했습니다. 실제 브라우저에서 육안 확인이 필요합니다.
