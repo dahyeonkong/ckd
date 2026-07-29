@@ -443,6 +443,7 @@ address {
    bell은 hero 위에 겹쳐 두고, 초기 상태와 진행은 GSAP이 관리한다. */
 .hero_ani {
   position: relative;
+  z-index: 1;
 }
 
 .hero {
@@ -500,6 +501,7 @@ address {
   width: 120px;
   height: 120px;
   margin: -60px 0 0 -60px;
+  transform-origin: top center;
   pointer-events: none;
 }
 
@@ -509,13 +511,14 @@ address {
 /* bell 모션 이후 확대되며 등장한다. 초기 상태와 진행은 GSAP이 관리한다. */
 .hyojong {
   position: relative;
+  z-index: 0;
   display: flex;
   flex-direction: column;
   gap: 40px;
   padding: 70px var(--gap_side);
   overflow: hidden;
   background-color: var(--color_blue00);
-  transform-origin: center center;
+  transform-origin: center -50vh;
   will-change: transform, opacity;
 }
 

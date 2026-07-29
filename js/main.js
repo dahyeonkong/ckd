@@ -380,7 +380,7 @@
       });
     }
 
-    window.gsap.set(bell, { scale: 0.35, opacity: 0 });
+    window.gsap.set(bell, { scale: 0.35, opacity: 0, rotation: 0 });
 
     var heroTl = window.gsap.timeline({
       defaults: { ease: "none" },
@@ -399,10 +399,13 @@
 
     heroTl
       /* hero 축소 후 소멸 */
-      .to(hero, { scale: 0.32, borderRadius: 60, duration: 1, ease: "power1.in" }, 0)
-      .to(hero, { opacity: 0, duration: 0.35 }, 0.5)
+      .to(hero, { scale: 0, borderRadius: 60, duration: 1, ease: "power1.in" }, 0)
+      .to(hero, { opacity: 0, duration: 0.25 }, 0.75)
       /* bell 등장 */
-      .to(bell, { scale: 1, opacity: 1, ease: "back.out(1.5)", duration: 0.5 }, 0.45);
+      .to(bell, { scale: 1, opacity: 1, ease: "back.out(1.5)", duration: 0.5 }, 0.45)
+      .to(bell, { rotation: 20, duration: 0.15, ease: "sine.inOut" }, 1)
+      .to(bell, { rotation: -20, duration: 0.3, repeat: 5, yoyo: true, ease: "sine.inOut" })
+      .to(bell, { rotation: 0, duration: 0.15, ease: "sine.inOut" });
   }
 
   /* bell 모션이 끝난 직후, 다음 섹션이 확대되며 화면을 채운다.
@@ -413,7 +416,7 @@
 
     window.gsap.fromTo(
       hyojong,
-      { scale: 0.2, opacity: 0.15, borderRadius: 80 },
+      { scale: 0, opacity: 0, borderRadius: 80 },
       {
         scale: 1,
         opacity: 1,
@@ -422,7 +425,9 @@
         scrollTrigger: {
           trigger: hyojong,
           start: "top bottom",
-          end: "top top",
+          end: function () {
+            return "+=" + window.innerHeight * 1.2;
+          },
           scrub: 0.8,
           invalidateOnRefresh: true
         }
