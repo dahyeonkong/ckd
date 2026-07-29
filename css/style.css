@@ -666,6 +666,7 @@ address {
 }
 
 @media (max-width: 1279px) {
+
   .platform_item .img_area,
   .platform_item .platform_desc,
   .platform_item .btn_pill {
@@ -996,14 +997,14 @@ address {
 
 /* .global_txt 는 카드 안에도 쓰이는 이름이라 섹션용 규칙은 직계 자식으로 한정한다.
    한정하지 않으면 카드 안 텍스트까지 섹션 좌우 여백(--gap_side)을 받아 폭이 사라진다. */
-.global_inner > .global_txt {
+.global_inner>.global_txt {
   display: flex;
   flex-direction: column;
   gap: 32px;
   padding-inline: var(--gap_side);
 }
 
-.global_inner > .global_txt .con_title {
+.global_inner>.global_txt .con_title {
   display: flex;
   flex-direction: column;
   gap: 10px;
@@ -1059,6 +1060,7 @@ address {
   from {
     transform: translateX(0);
   }
+
   to {
     transform: translateX(calc(var(--marquee_shift) * -1));
   }
@@ -1586,7 +1588,7 @@ address {
   }
 
   /* .global_txt 는 카드 안에도 쓰이므로 직계 자식으로 한정한다 */
-  .global_inner > .global_txt {
+  .global_inner>.global_txt {
     height: 194px;
     padding-inline: 0;
   }
@@ -1683,7 +1685,9 @@ address {
     height: 314px;
     border-radius: var(--radius_product);
   }
-
+  .product_card{
+    justify-content: space-between;
+  }
   .product_list.is_product_stack .product_card,
   .product_list.is_product_stack .product_card:nth-child(3) {
     position: absolute;
@@ -2312,7 +2316,7 @@ address {
     padding-inline: 0;
   }
 
-  .global_inner > .global_txt {
+  .global_inner>.global_txt {
     position: absolute;
     top: 0;
     left: 0;
