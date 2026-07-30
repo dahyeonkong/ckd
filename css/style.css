@@ -2224,7 +2224,7 @@ address {
 
   /* platform - 가로 배치 */
   .platform {
-    height: 200vh;
+    height: 240vh;
     padding: 0;
   }
 

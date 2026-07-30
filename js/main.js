@@ -306,11 +306,11 @@
         onLeaveBack: resetMolacElements,
         onUpdate: function (self) {
           setActiveItem(
-            self.progress < 0.25
+            self.progress < 0.18
               ? -1
-              : self.progress < 0.62
+              : self.progress < 0.64
                 ? 0
-                : self.progress < 0.74
+                : self.progress < 0.82
                   ? -1
                   : 1
           );
