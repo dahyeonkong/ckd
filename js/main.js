@@ -277,7 +277,15 @@
         onLeave: releaseMolacElements,
         onLeaveBack: resetMolacElements,
         onUpdate: function (self) {
-          setActiveItem(self.progress < 0.25 ? -1 : self.progress < 0.65 ? 0 : 1);
+          setActiveItem(
+            self.progress < 0.25
+              ? -1
+              : self.progress < 0.62
+                ? 0
+                : self.progress < 0.74
+                  ? -1
+                  : 1
+          );
         }
       });
 
@@ -369,6 +377,42 @@
         })
       );
     });
+  }
+
+  /* ---------------------------------------------------------
+     header는 아래로 스크롤할 때 숨기고, 위로 스크롤하면 다시 보인다.
+     --------------------------------------------------------- */
+  function initHeaderScrollVisibility() {
+    var header = document.getElementById("header");
+    if (!header) return;
+
+    var lastScrollY = window.scrollY;
+    var isTicking = false;
+
+    function syncHeaderVisibility() {
+      var currentScrollY = window.scrollY;
+
+      if (currentScrollY <= header.offsetHeight) {
+        header.classList.remove("is_scroll_hidden");
+      } else if (currentScrollY > lastScrollY) {
+        header.classList.add("is_scroll_hidden");
+      } else if (currentScrollY < lastScrollY) {
+        header.classList.remove("is_scroll_hidden");
+      }
+
+      lastScrollY = currentScrollY;
+      isTicking = false;
+    }
+
+    function handleScroll() {
+      if (isTicking) return;
+
+      isTicking = true;
+      window.requestAnimationFrame(syncHeaderVisibility);
+    }
+
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    syncHeaderVisibility();
   }
 
   /* ---------------------------------------------------------
@@ -491,7 +535,7 @@
       /* bell 등장 */
       .to(bell, { scale: 1, opacity: 1, ease: "back.out(1.5)", duration: 0.5 }, 0.45)
       .to(bell, { rotation: 20, duration: 0.15, ease: "sine.inOut" }, 1)
-      .to(bell, { rotation: -20, duration: 0.3, repeat: 5, yoyo: true, ease: "sine.inOut" })
+      .to(bell, { rotation: -20, duration: 0.3, repeat: 3, yoyo: true, ease: "sine.inOut" })
       .to(bell, { rotation: 0, duration: 0.15, ease: "sine.inOut" });
   }
 
@@ -589,6 +633,11 @@
 
   function initRevealAnimation() {
     document.querySelectorAll(".js_reveal").forEach(function (item) {
+      if (item.classList.contains("story") &&
+        window.matchMedia("(min-width: 1280px)").matches) {
+        return;
+      }
+
       if (item.classList.contains("product_card") &&
         item.closest(".product_list").classList.contains("is_product_stack")) {
         return;
@@ -623,6 +672,47 @@
   }
 
   /* ---------------------------------------------------------
+     데스크톱 history story는 스크롤 진행에 맞춰 한 장씩 나타난다.
+     --------------------------------------------------------- */
+  function initDesktopStoryReveal() {
+    var history = document.getElementById("history");
+    var stories = history
+      ? Array.prototype.slice.call(history.querySelectorAll(".story"))
+      : [];
+    if (!stories.length) return;
+
+    var media = window.gsap.matchMedia();
+
+    media.add("(min-width: 1280px)", function () {
+      var storyTweens = stories.map(function (story) {
+        return window.gsap.fromTo(
+          story,
+          { y: 40, opacity: 0 },
+          {
+            y: 0,
+            opacity: 1,
+            ease: "power2.out",
+            scrollTrigger: {
+              trigger: story,
+              start: "top 70%",
+              end: "top 45%",
+              scrub: 0.6,
+              invalidateOnRefresh: true
+            }
+          }
+        );
+      });
+
+      return function () {
+        storyTweens.forEach(function (tween) {
+          tween.kill();
+        });
+        window.gsap.set(stories, { clearProps: "transform,opacity" });
+      };
+    });
+  }
+
+  /* ---------------------------------------------------------
      init
      --------------------------------------------------------- */
   function init() {
@@ -630,6 +720,7 @@
     initGnb();
     initSelectBox();
     initGlobalMarquee();
+    initHeaderScrollVisibility();
 
     if (!hasGsap || !hasScrollTrigger) return;
 
@@ -641,6 +732,7 @@
       initHyojongAnimation();
       initProductStack();
       initHistoryLineAnimation();
+      initDesktopStoryReveal();
       initRevealAnimation();
     }
 
