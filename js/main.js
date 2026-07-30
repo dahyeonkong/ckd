@@ -606,6 +606,7 @@
   function initProductStack() {
     var section = document.getElementById("new_area");
     var productList = section && section.querySelector(".product_list");
+    var newTitle = section && section.querySelector(".con_title");
     if (!section || !productList) return;
 
     var cards = Array.prototype.slice.call(
@@ -635,14 +636,26 @@
         defaults: { ease: "none" },
         scrollTrigger: {
           trigger: productList,
-          start: "top 15%",
+          start: function () {
+            return window.matchMedia("(min-width: 1280px)").matches
+              ? "top 28%"
+              : "top 15%";
+          },
           end: function () {
             return "+=" + window.innerHeight * 2;
           },
           scrub: 0.8,
           pin: true,
           anticipatePin: 1,
-          invalidateOnRefresh: true
+          invalidateOnRefresh: true,
+          onLeave: function () {
+            if (window.matchMedia("(min-width: 1280px)").matches && newTitle) {
+              newTitle.classList.add("is_sticky_released");
+            }
+          },
+          onEnterBack: function () {
+            if (newTitle) newTitle.classList.remove("is_sticky_released");
+          }
         }
       });
 
@@ -654,6 +667,7 @@
 
       return function () {
         productList.classList.remove("is_product_stack");
+        if (newTitle) newTitle.classList.remove("is_sticky_released");
         window.gsap.set(cards, { clearProps: "transform,opacity,zIndex" });
       };
     });

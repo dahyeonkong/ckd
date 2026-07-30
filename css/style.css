@@ -2236,13 +2236,13 @@ address {
     height: 100vh;
     gap: 92px;
     max-width: 1440px;
-    margin: 0 var(--gap_side);
+    margin: 0 auto;
     padding: 104px 0 60px;
   }
 
   .platform .con_title {
     position: relative;
-    left: calc(max(0px, 50vw - 720px) - var(--gap_side));
+    left: 0;
   }
 
   /* 남는 높이를 모두 차지하고, 항목은 그 안에 절대배치한다.
@@ -2567,16 +2567,21 @@ address {
 
   .new_area .con_title {
     position: sticky;
-    top: 80px;
+    top: 120px;
     z-index: 4;
     max-width: 1440px;
     margin-inline: auto;
     padding-inline: 0;
   }
 
+  .new_area .con_title.is_sticky_released {
+    position: relative;
+    top: auto;
+  }
+
   .product_list {
     gap: 40px;
-    margin-top: 150px;
+    margin-top: 60px;
   }
 
   .product_list.is_product_stack {
