@@ -680,7 +680,7 @@ address {
     transform: none;
   }
 
-  .platform_name {
+  .platform_item .platform_name {
     color: var(--color_blue06);
   }
 }
@@ -1420,6 +1420,26 @@ address {
   display: none;
 }
 
+@media (max-width: 1279px) {
+  .footer:has(.select_btn[aria-expanded="true"]) {
+    overflow: visible;
+  }
+
+  .select_list {
+    overscroll-behavior: contain;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+  }
+
+  .select_list::-webkit-scrollbar {
+    display: none;
+  }
+
+  .select_box {
+    z-index: 1;
+  }
+}
+
 /* =========================================================
    tablet 834px
    ========================================================= */
@@ -1435,6 +1455,26 @@ address {
 
   .header {
     padding: 20px var(--gap_side);
+  }
+
+  .mobile_menu {
+    width: 70vw;
+    max-width: none;
+  }
+
+  .btn_close,
+  .btn_close img {
+    width: 32px;
+    height: 32px;
+  }
+
+  .mobile_menu_item {
+    width: 100%;
+  }
+
+  .mobile_menu_btn,
+  .mobile_menu_link {
+    justify-content: space-between;
   }
 
   .btn_hammenu,
@@ -1673,6 +1713,13 @@ address {
 
   .new_area {
     padding: 160px 0;
+    overflow: visible;
+  }
+
+  .new_area .con_title {
+    position: sticky;
+    top: 80px;
+    z-index: 4;
   }
 
   .product_list {
@@ -1784,7 +1831,7 @@ address {
     flex-direction: row;
     align-items: flex-start;
     justify-content: space-between;
-    max-width: 754px;
+    max-width: 100%;
     margin: 60px 0 0;
   }
 
