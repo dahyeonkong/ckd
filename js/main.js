@@ -47,12 +47,40 @@
     var header = document.getElementById("header");
     var btnLabel = btnHammenu.querySelector(".blind");
     var accordionBtns = mobileMenu.querySelectorAll(".mobile_menu_btn");
+    var lnbCloseTimers = new WeakMap();
+
+    function clearLnbCloseTimer(panel) {
+      var closeTimer = lnbCloseTimers.get(panel);
+      if (closeTimer) {
+        window.clearTimeout(closeTimer);
+        lnbCloseTimers.delete(panel);
+      }
+    }
+
+    function closeLnb(panel) {
+      if (panel.hidden) return;
+
+      clearLnbCloseTimer(panel);
+      panel.classList.remove("is_open");
+
+      lnbCloseTimers.set(panel, window.setTimeout(function () {
+        if (!panel.classList.contains("is_open")) panel.hidden = true;
+      }, 400));
+    }
+
+    function openLnb(panel) {
+      clearLnbCloseTimer(panel);
+      panel.hidden = false;
+      window.requestAnimationFrame(function () {
+        panel.classList.add("is_open");
+      });
+    }
 
     function closeAllLnb() {
       accordionBtns.forEach(function (btn) {
         btn.setAttribute("aria-expanded", "false");
         var panel = document.getElementById(btn.getAttribute("aria-controls"));
-        if (panel) panel.hidden = true;
+        if (panel) closeLnb(panel);
       });
     }
 
@@ -83,12 +111,12 @@
       var panel = document.getElementById(btn.getAttribute("aria-controls"));
       if (!panel) return;
 
-      var willOpen = panel.hidden;
+      var willOpen = panel.hidden || !panel.classList.contains("is_open");
       closeAllLnb();
 
       if (willOpen) {
         btn.setAttribute("aria-expanded", "true");
-        panel.hidden = false;
+        openLnb(panel);
       }
     }
 

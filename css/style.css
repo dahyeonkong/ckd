@@ -291,15 +291,15 @@ address {
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 22px;
-  height: 20px;
+  width: 24px;
+  height: 24px;
   color: var(--color_gray03);
   transition: color var(--dur_base) var(--ease_base);
 }
 
 .btn_hammenu .ico {
-  width: 22px;
-  height: 20px;
+  width: 24px;
+  height: 24px;
 }
 
 /* 밝은 섹션 위를 지날 때 로고와 아이콘도 어둡게 전환한다.
@@ -381,14 +381,25 @@ address {
   height: 24px;
 }
 
+.btn_close img {
+  width: 24px;
+  height: 24px;
+}
+
 .mobile_menu_list {
   padding: 35px 24px;
 }
 
 .mobile_menu_item+.mobile_menu_item {
-  margin-top: 10px;
+  margin-top: 0;
 }
 
+.mobile_menu_item {
+  border-bottom: 1px solid var(--color_blue06);
+}
+.mobile_menu_item:last-child {
+  border-bottom: 0;
+} 
 .mobile_menu_btn,
 .mobile_menu_link {
   display: flex;
@@ -406,8 +417,8 @@ address {
 
 .mobile_menu_btn .ico {
   flex-shrink: 0;
-  width: 18px;
-  height: 18px;
+  width: 20px;
+  height: 20px;
   transition: transform var(--dur_base) var(--ease_base);
 }
 
@@ -418,7 +429,19 @@ address {
 .mobile_lnb {
   display: flex;
   flex-direction: column;
+  max-height: 0;
+  padding: 0 0 0 12px;
+  overflow: hidden;
+  opacity: 0;
+  transition: max-height var(--dur_base) var(--ease_base),
+    padding var(--dur_base) var(--ease_base),
+    opacity var(--dur_base) var(--ease_base);
+}
+
+.mobile_lnb.is_open {
+  max-height: 360px;
   padding: 4px 0 12px 12px;
+  opacity: 1;
 }
 
 .mobile_lnb[hidden] {
@@ -734,6 +757,7 @@ address {
 .molac {
   position: absolute;
   pointer-events: none;
+  z-index: -88;
 }
 
 .molac img {
@@ -1251,6 +1275,30 @@ address {
   font-size: 14px;
 }
 
+@media (max-width: 833px) {
+  .product_list {
+    max-width: 440px;
+    margin-inline: auto;
+  }
+
+  .product_card {
+    max-width: none;
+    height: auto;
+    aspect-ratio: 170 / 308;
+  }
+
+  .product_card:nth-child(3) {
+    max-width: none;
+    height: auto;
+    aspect-ratio: 362 / 200;
+  }
+
+  .product_img {
+    height: auto;
+    aspect-ratio: 160 / 137;
+  }
+}
+
 @media (hover: hover) {
   .product_card:hover {
     transform: translateY(-6px);
@@ -1462,10 +1510,24 @@ address {
     max-width: none;
   }
 
-  .btn_close,
-  .btn_close img {
+  .btn_close {
     width: 32px;
     height: 32px;
+  }
+
+  .btn_close img {
+    width: 24px;
+    height: 24px;
+  }
+
+  .mobile_menu_btn .ico {
+    width: 28px;
+    height: 28px;
+  }
+
+  .mobile_menu_btn,
+  .mobile_menu_link {
+    height: 80px;
   }
 
   .mobile_menu_item {
@@ -1475,12 +1537,17 @@ address {
   .mobile_menu_btn,
   .mobile_menu_link {
     justify-content: space-between;
+    font-size: 20px;
   }
 
   .btn_hammenu,
   .btn_hammenu .ico {
     width: 32px;
     height: 32px;
+  }
+
+  .mobile_lnb a {
+    font-size: 16px;
   }
 
   .logo {
@@ -1747,9 +1814,11 @@ address {
     height: 314px;
     border-radius: var(--radius_product);
   }
-  .product_card{
+
+  .product_card {
     justify-content: space-between;
   }
+
   .product_list.is_product_stack .product_card,
   .product_list.is_product_stack .product_card:nth-child(3) {
     position: absolute;
@@ -1881,6 +1950,40 @@ address {
   @media (hover: hover) {
     .footer_btn_area a:hover {
       color: var(--color_gray02);
+    }
+  }
+}
+
+@media (max-width: 1279px) {
+  .footer_bg_letter {
+    --footer_marquee_gap: 31px;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    display: flex;
+    gap: var(--footer_marquee_gap);
+    width: max-content;
+    font-family: var(--font_en);
+    font-size: 100px;
+    font-weight: 800;
+    line-height: 1;
+    letter-spacing: -2px;
+    white-space: nowrap;
+    color: var(--color_gray06);
+    opacity: 0.25;
+    transform: translateX(0);
+    animation: footer_marquee 28s linear infinite;
+    will-change: transform;
+    pointer-events: none;
+  }
+
+  .footer_bg_letter .footer_bg_clone {
+    display: block;
+  }
+
+  @keyframes footer_marquee {
+    to {
+      transform: translateX(calc(-50% - 15.5px));
     }
   }
 }
