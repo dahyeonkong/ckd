@@ -659,6 +659,43 @@
     });
   }
 
+  /* ---------------------------------------------------------
+     모바일/태블릿 platform 항목은 아래에서 나타난다.
+     데스크톱은 고정 스크롤 인터랙션을 별도로 사용한다.
+     --------------------------------------------------------- */
+  function initResponsivePlatformReveal() {
+    var items = Array.prototype.slice.call(
+      document.querySelectorAll(".platform_item")
+    );
+    if (!items.length) return;
+
+    var media = window.gsap.matchMedia();
+
+    media.add("(max-width: 1279px)", function () {
+      var itemTweens = items.map(function (item) {
+        return window.gsap.from(item, {
+          y: 40,
+          opacity: 0,
+          duration: 0.8,
+          ease: "power2.out",
+          scrollTrigger: {
+            trigger: item,
+            start: "top 88%",
+            once: true,
+            invalidateOnRefresh: true
+          }
+        });
+      });
+
+      return function () {
+        itemTweens.forEach(function (tween) {
+          tween.kill();
+        });
+        window.gsap.set(items, { clearProps: "transform,opacity" });
+      };
+    });
+  }
+
   function initRevealAnimation() {
     document.querySelectorAll(".js_reveal").forEach(function (item) {
       if (item.classList.contains("story") &&
@@ -761,6 +798,7 @@
       initProductStack();
       initHistoryLineAnimation();
       initDesktopStoryReveal();
+      initResponsivePlatformReveal();
       initRevealAnimation();
     }
 
